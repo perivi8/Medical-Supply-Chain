@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-farmer',
@@ -15,7 +16,7 @@ export class FarmerComponent implements OnInit {
   success: string | null = null;
   error: string | null = null;
   qrCodeBase64: string | null = null;
-  private apiUrl = 'https://suply-chain-backend-6.onrender.com';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

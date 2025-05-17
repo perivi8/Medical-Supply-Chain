@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,6 @@ export class LoginComponent {
   identifier = '';
   password = '';
   error = '';
-  private apiUrl = 'https://suply-chain-backend-6.onrender.com';
 
   constructor(private http: HttpClient, private router: Router) {
     const user = localStorage.getItem('user');
@@ -23,7 +23,10 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    this.http.post(`${this.apiUrl}/login`, {
+    this.error = '';
+    console.log('Attempting login with identifier:', this.identifier);
+
+    this.http.post(`${environment.apiUrl}/login`, {
       identifier: this.identifier,
       password: this.password
     }).subscribe({
@@ -35,11 +38,12 @@ export class LoginComponent {
           window.dispatchEvent(new Event('storage'));
           this.redirectToRole(response.role);
         } else {
-          this.error = 'Invalid login response. Please try again.';
+          this.error = 'Invalid login response from server. Please try again.';
+          console.warn('Unexpected response format:', response);
         }
       },
       error: (err) => {
-        this.error = err.error?.error || 'Login failed';
+        this.error = err.error?.error || 'Login failed. Please check your credentials.';
         console.error('Login error:', err);
       }
     });

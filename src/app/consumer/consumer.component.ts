@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BarcodeFormat } from '@zxing/library';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-consumer',
@@ -20,7 +21,7 @@ export class ConsumerComponent implements OnInit {
   formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
   hasCamera: boolean = false;
 
-  private apiUrl = 'https://suply-chain-backend-6.onrender.com';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -70,13 +71,14 @@ export class ConsumerComponent implements OnInit {
   }
 
   toggleScanner() {
+    if (!this.hasCamera) {
+      this.error = 'Camera not available in this browser or device.';
+      return;
+    }
     this.isScanning = !this.isScanning;
     this.error = null;
     if (!this.isScanning) {
       this.history = null;
-    } else if (!this.hasCamera) {
-      this.error = 'Camera not available in this browser or device.';
-      this.isScanning = false;
     }
     console.log('Scanner toggled:', this.isScanning);
   }
@@ -91,6 +93,7 @@ export class ConsumerComponent implements OnInit {
       this.fetchProductHistory(this.medicineId);
     } else {
       this.error = 'Invalid QR code format. Expected /consumer/<id>.';
+      this.isScanning = false;
       console.log('Regex match failed for:', result);
     }
   }
@@ -123,7 +126,7 @@ export class ConsumerComponent implements OnInit {
   private fetchProductHistory(id: string) {
     this.isLoading = true;
     console.log('Fetching history for ID:', id);
-    this.http.get(`${this.apiUrl}/consumer/${id}`).subscribe({
+    this.http.get(`${this.apiUrl}/product_history/${id}`).subscribe({
       next: (data: any) => {
         console.log('History data:', data);
         this.history = data;
@@ -131,7 +134,7 @@ export class ConsumerComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load product history. Please try again.';
+        this.error = err.status === 404 ? 'Product history not found for this ID.' : 'Failed to load product history. Please try again.';
         this.history = null;
         this.isLoading = false;
         console.error('History fetch error:', err);

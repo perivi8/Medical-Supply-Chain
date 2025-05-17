@@ -30,7 +30,6 @@ const routes: Routes = [
   { path: 'consumer/:id', component: ConsumerComponent },
 ];
 
-
 @NgModule({
   declarations: [
     AppComponent,

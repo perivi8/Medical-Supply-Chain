@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'distributor', component: DistributorComponent },
   { path: 'retailer', component: RetailerComponent },
   { path: 'consumer', component: ConsumerComponent },
+  { path: 'consumer/:id', component: ConsumerComponent },
   { path: '**', redirectTo: 'login' }
 ];
 
