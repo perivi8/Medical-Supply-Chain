@@ -93,3 +93,4 @@ export class RetailerComponent implements OnInit {
     this.retail_location = '';
   }
 }
+

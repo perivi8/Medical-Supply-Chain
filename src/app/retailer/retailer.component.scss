@@ -23,3 +23,24 @@
   position: relative;
   z-index: 2;
 }
+
+.form-background {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .form-background {
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}
+
+img.img-thumbnail {
+  max-width: 100%;
+  height: auto;
+}
+

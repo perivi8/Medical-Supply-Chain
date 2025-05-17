@@ -29,3 +29,15 @@
   padding-left: 1rem;
   border-left: 4px solid #ccc;
 }
+
+.form-background {
+  background-color: #f8f9fa;
+}
+
+.timeline-item {
+  transition: all 0.3s ease-in-out;
+}
+
+.timeline-item:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

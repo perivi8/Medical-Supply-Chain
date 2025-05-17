@@ -1,56 +1,71 @@
-<div class="container mt-5 animate__animated animate__fadeIn">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="text-center mb-4">Register</h2>
-          <form (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-              <label for="first_name" class="form-label">First Name</label>
-              <input type="text" id="first_name" [(ngModel)]="form.first_name" name="first_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="last_name" class="form-label">Last Name</label>
-              <input type="text" id="last_name" [(ngModel)]="form.last_name" name="last_name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" id="email" [(ngModel)]="form.email" name="email" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="phone" class="form-label">Phone</label>
-              <input type="tel" id="phone" [(ngModel)]="form.phone" name="phone" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" id="password" [(ngModel)]="form.password" name="password" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="confirm_password" class="form-label">Confirm Password</label>
-              <input type="password" id="confirm_password" [(ngModel)]="form.confirm_password" name="confirm_password" class="form-control" required>
-            </div>
-            <div class="mb-3">
-              <label for="role" class="form-label">Role</label>
-              <select id="role" [(ngModel)]="form.role" name="role" class="form-select" required>
-                <option value="" disabled selected>Select Role</option>
-                <option value="Farmer">Farmer</option>
-                <option value="Manufacturer">Manufacturer</option>
-                <option value="Distributor">Distributor</option>
-                <option value="Retailer">Retailer</option>
-              </select>
-            </div>
-            <div class="text-danger text-center mb-3" *ngIf="error">{{ error }}</div>
-            
-            <!-- Register button hidden until all fields valid -->
-            <button *ngIf="!isFormIncomplete()" type="submit" class="btn btn-primary w-100">
-              Register
-            </button>
-          </form>
-        </div>
+<!-- Full-Screen Centered Register Form -->
+<div class="form-background d-flex justify-content-center align-items-center">
+  <div class="container animate__animated animate__fadeIn" style="max-width: 500px;">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="text-center mb-4">Register</h2>
+
+        <form (ngSubmit)="onSubmit()">
+          <!-- First Name -->
+          <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" id="first_name" [(ngModel)]="form.first_name" name="first_name" class="form-control" required>
+          </div>
+
+          <!-- Last Name -->
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" id="last_name" [(ngModel)]="form.last_name" name="last_name" class="form-control" required>
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" [(ngModel)]="form.email" name="email" class="form-control" required>
+          </div>
+
+          <!-- Phone -->
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="tel" id="phone" [(ngModel)]="form.phone" name="phone" class="form-control" required>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" [(ngModel)]="form.password" name="password" class="form-control" required>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-3">
+            <label for="confirm_password" class="form-label">Confirm Password</label>
+            <input type="password" id="confirm_password" [(ngModel)]="form.confirm_password" name="confirm_password" class="form-control" required>
+          </div>
+
+          <!-- Role -->
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select id="role" [(ngModel)]="form.role" name="role" class="form-select" required>
+              <option value="" disabled selected>Select Role</option>
+              <option value="Farmer">Farmer</option>
+              <option value="Manufacturer">Manufacturer</option>
+              <option value="Distributor">Distributor</option>
+              <option value="Retailer">Retailer</option>
+            </select>
+          </div>
+
+          <!-- Error Message -->
+          <div class="text-danger text-center mb-3" *ngIf="error">{{ error }}</div>
+
+          <!-- Submit Button -->
+          <button *ngIf="!isFormIncomplete()" type="submit" class="btn btn-primary w-100">
+            Register
+          </button>
+        </form>
       </div>
     </div>
   </div>
 </div>
 
-<br><br><br>
+<!-- Footer (outside the centered layout) -->
 <app-footer></app-footer>

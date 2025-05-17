@@ -1,11 +1,25 @@
-<div class="form-background d-flex justify-content-center align-items-center vh-100">
+<!-- Main Centered Form Background -->
+<div class="form-background d-flex justify-content-center align-items-center">
   <div class="container bg-white bg-opacity-75 rounded shadow-lg p-4" style="max-width: 550px;">
     <h2 class="text-center mb-4 animate__animated animate__fadeInDown fw-bold text-primary">
       Manufacturer - Add Medicine
     </h2>
 
-    <!-- Medicine Form -->
-    <form (ngSubmit)="onSubmit()">
+    <!-- Success Message and QR Code -->
+    <div *ngIf="success" class="text-center text-success fw-semibold">
+      {{ success }}
+      <div *ngIf="qrCodeBase64" class="mt-3">
+        <h5 class="fw-bold">Generated QR Code</h5>
+        <img [src]="qrCodeBase64" alt="Medicine QR Code" class="img-thumbnail w-50">
+      </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="text-danger text-center mt-3">{{ error }}</div>
+
+    <!-- Form Section (Always Visible) -->
+    <form (ngSubmit)="onSubmit()" class="mt-4">
+      <!-- Raw Material Selection -->
       <div class="mb-3">
         <h5 class="fw-semibold mb-2">Select Raw Material</h5>
         <select
@@ -24,6 +38,7 @@
         </div>
       </div>
 
+      <!-- Medicine Name -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Medicine Name</label>
         <input
@@ -35,6 +50,7 @@
           required>
       </div>
 
+      <!-- Batch Number -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Batch Number</label>
         <input
@@ -46,6 +62,7 @@
           required>
       </div>
 
+      <!-- Production Date -->
       <div class="mb-3">
         <label class="form-label fw-semibold">Production Date</label>
         <input
@@ -56,6 +73,7 @@
           required>
       </div>
 
+      <!-- Expiry Date -->
       <div class="mb-4">
         <label class="form-label fw-semibold">Expiry Date</label>
         <input
@@ -68,20 +86,8 @@
 
       <button type="submit" class="btn btn-primary w-100">Add Medicine</button>
     </form>
-
-    <!-- Success Message and QR Code -->
-    <div *ngIf="success" class="mt-4 text-center text-success fw-semibold">
-      {{ success }}
-      <div *ngIf="qrCodeBase64" class="mt-3">
-        <h5 class="fw-bold">Generated QR Code</h5>
-        <img [src]="qrCodeBase64" alt="Medicine QR Code" class="img-thumbnail w-50">
-      </div>
-    </div>
-
-    <!-- Error Message -->
-    <div *ngIf="error" class="text-danger text-center mt-3">{{ error }}</div>
   </div>
 </div>
 
-<br><br><br><br><br><br>
+<!-- Footer -->
 <app-footer></app-footer>

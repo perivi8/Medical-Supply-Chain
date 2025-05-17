@@ -1,46 +1,51 @@
-<div class="container mt-5 animate__animated animate__fadeIn">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="text-center mb-4">Login</h2>
-          <form (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-              <label for="identifier" class="form-label">Email or Phone</label>
-              <input
-                type="text"
-                id="identifier"
-                [(ngModel)]="identifier"
-                name="identifier"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="mb-3">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                id="password"
-                [(ngModel)]="password"
-                name="password"
-                class="form-control"
-                required
-              />
-            </div>
-            <div class="text-danger text-center mb-3" *ngIf="error">{{ error }}</div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
-          </form>
-          <div class="text-center mt-3">
-            <p class="mb-0">Don't have an account?
-              <a routerLink="/register" class="text-decoration-none text-primary">Register</a>
-            </p>
+<!-- Full-page background with centering -->
+<div class="form-background d-flex justify-content-center align-items-center">
+  <div class="container animate__animated animate__fadeIn" style="max-width: 500px;">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="text-center mb-4">Login</h2>
+
+        <!-- Error Message -->
+        <div *ngIf="error" class="text-danger text-center mb-3">{{ error }}</div>
+
+        <!-- Login Form -->
+        <form (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="identifier" class="form-label">Email or Phone</label>
+            <input
+              type="text"
+              id="identifier"
+              [(ngModel)]="identifier"
+              name="identifier"
+              class="form-control"
+              required
+            />
           </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              [(ngModel)]="password"
+              name="password"
+              class="form-control"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <!-- Register Link -->
+        <div class="text-center mt-3">
+          <p class="mb-0">
+            Don't have an account?
+            <a routerLink="/register" class="text-decoration-none text-primary">Register</a>
+          </p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<br><br><br>
-
+<!-- Footer -->
 <app-footer></app-footer>
