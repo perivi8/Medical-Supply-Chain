@@ -1,0 +1,100 @@
+<div class="form-background d-flex justify-content-center align-items-start py-5 min-vh-100">
+  <div class="container bg-white bg-opacity-75 rounded shadow-lg p-4" style="max-width: 700px;">
+    <h2 class="text-center mb-4 animate__animated animate__fadeInDown fw-bold text-primary">
+      Consumer - Medicine Journey
+    </h2>
+
+    <!-- QR Code Scanner -->
+    <div class="mb-4">
+      <h5 class="fw-semibold mb-2">Scan QR Code</h5>
+      <button
+        (click)="toggleScanner()"
+        class="btn btn-outline-primary w-100 mb-2"
+        [disabled]="!hasCamera"
+      >
+        {{ isScanning ? 'Stop Scanning' : 'Start Scanning' }}
+      </button>
+
+      <div *ngIf="isScanning" class="border rounded overflow-hidden">
+        <zxing-scanner
+          [device]="currentDevice"
+          [formats]="formatsEnabled"
+          (scanSuccess)="onScanSuccess($event)"
+          (scanError)="onScanError($event)"
+          class="w-100"
+        ></zxing-scanner>
+      </div>
+    </div>
+
+    <!-- Manual ID Entry Form -->
+    <form (ngSubmit)="onSubmit()" class="mb-4">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Enter Medicine ID</label>
+        <input
+          type="text"
+          [(ngModel)]="medicineId"
+          name="medicineId"
+          class="form-control"
+          placeholder="Enter Medicine ID"
+        >
+      </div>
+      <button type="submit" class="btn btn-primary w-100">View History</button>
+    </form>
+
+    <!-- Dropdown -->
+    <!-- <div class="mb-4">
+      <h5 class="fw-semibold mb-2">Select Medicine</h5>
+      <select
+        [(ngModel)]="medicineId"
+        (ngModelChange)="selectMedicine($event)"
+        name="medicineSelect"
+        class="form-select"
+      >
+        <option value="" disabled>Select a Medicine</option>
+        <option *ngFor="let medicine of medicines" [value]="medicine.id">
+          ID: {{ medicine.id }} - {{ medicine.medicine_name }} (Batch: {{ medicine.batch_number }})
+        </option>
+      </select>
+    </div> -->
+
+    <!-- Error -->
+    <!-- <div *ngIf="error" class="text-danger text-center mb-3">{{ error }}</div> -->
+
+    <!-- Product History -->
+    <div *ngIf="history" class="timeline">
+      <div class="timeline-item mb-4 p-3 border-start border-3 border-primary bg-light rounded">
+        <h5 class="fw-bold text-primary">Raw Material</h5>
+        <p>Type: {{ history.raw_material.material_type }}</p>
+        <p>Quantity: {{ history.raw_material.quantity }} kg</p>
+        <p>Location: {{ history.raw_material.source_location }}</p>
+        <p>Date: {{ history.raw_material.supply_date }}</p>
+      </div>
+
+      <div class="timeline-item mb-4 p-3 border-start border-3 border-success bg-light rounded">
+        <h5 class="fw-bold text-success">Manufacturing</h5>
+        <p>Name: {{ history.medicine.medicine_name }}</p>
+        <p>Batch: {{ history.medicine.batch_number }}</p>
+        <p>Production: {{ history.medicine.production_date }}</p>
+        <p>Expiry: {{ history.medicine.expiry_date }}</p>
+      </div>
+
+      <div class="timeline-item mb-4 p-3 border-start border-3 border-warning bg-light rounded" *ngFor="let dist of history?.distributions">
+        <h5 class="fw-bold text-warning">Distribution</h5>
+        <p>Shipment: {{ dist.shipment_date }}</p>
+        <p>Transport: {{ dist.transport_method }}</p>
+        <p>Destination: {{ dist.destination }}</p>
+        <p>Storage: {{ dist.storage_condition }}</p>
+      </div>
+
+      <div class="timeline-item mb-4 p-3 border-start border-3 border-danger bg-light rounded" *ngFor="let sale of history?.retail_sales">
+        <h5 class="fw-bold text-danger">Retail</h5>
+        <p>Received: {{ sale.received_date }}</p>
+        <p>Price: ${{ sale.price }}</p>
+        <p>Location: {{ sale.retail_location }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-footer></app-footer>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QR Code Scanner</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        /* RESET + BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            min-height: 100%;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background: #fff;
+            color: #333;
+        }
+
+        /* --- QR CODE SECTION --- */
+        .qr-section {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2dfdb 100%);
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 15px;
+        }
+        .qr-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            max-width: 900px;
+            padding: 20px;
+            position: relative;
+            width: 100%;
+            gap: 40px;
+        }
+        .qr-text-section {
+            max-width: 350px;
+        }
+        .qr-text-section h1 {
+            color: #ff5722;
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .qr-text-section p {
+            color: #333;
+            font-size: 1.1rem;
+            max-width: 300px;
+            margin-bottom: 25px;
+        }
+        .btn-custom {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+        .btn-custom:hover {
+            background-color: #e64a19;
+        }
+
+        /* QR code container and phone animation */
+        .qr-code-container {
+            position: relative;
+            width: 220px;
+            height: 280px;
+            flex-shrink: 0;
+        }
+
+        /* QR Code SVG */
+        .qr-code {
+            width: 220px;
+            height: 220px;
+            background: #fff;
+            border: 4px solid #222;
+            border-radius: 8px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.15);
+        }
+
+        /* Phone styling */
+        .phone {
+            position: absolute;
+            width: 120px;
+            height: 220px;
+            border-radius: 32px;
+            background: #111;
+            border: 6px solid #222;
+            top: 270px;       /* start below QR */
+            right: -140px;    /* start off to right */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 2s ease;
+            overflow: visible;
+            z-index: 10;
+        }
+        .screen {
+            position: relative;
+            width: 100px;
+            height: 180px;
+            background: #000;
+            border-radius: 18px;
+            overflow: hidden;
+            color: #0f0;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            user-select: none;
+        }
+
+        .scan-bar {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Medicine name inside phone */
+        .medicine-name-screen {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Medicine name below QR */
+        .medicine-name {
+            position: absolute;
+            top: 230px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #222;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes scanAnim {
+            0% {
+                top: -40px;
+                opacity: 1;
+            }
+            50% {
+                top: 140px;
+                opacity: 1;
+            }
+            100% {
+                top: 180px;
+                opacity: 0;
+            }
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-section {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 15px;
+            text-align: center;
+        }
+        .about-section h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .about-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .about-section ul {
+            list-style-type: disc;
+            text-align: left;
+            max-width: 700px;
+            margin: 0 auto 20px auto;
+            padding-left: 20px;
+            color: #555;
+        }
+        .about-section ul li {
+            margin-bottom: 10px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: #ddd;
+            padding: 30px 15px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            font-size: 0.9rem;
+        }
+        footer .footer-logo-text {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #fff;
+            flex-basis: 100%;
+            text-align: center;
+        }
+        footer .footer-nav, footer .footer-about, footer .footer-contact {
+            flex: 1 1 200px;
+            max-width: 300px;
+        }
+        footer h3 {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        footer ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        footer ul li {
+            margin-bottom: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        footer ul li:hover {
+            text-decoration: underline;
+        }
+        footer .footer-about p, footer .footer-contact p {
+            color: #bbb;
+            line-height: 1.4;
+        }
+        footer .footer-contact p {
+            margin-bottom: 10px;
+        }
+        footer .social-icons {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
+        }
+        footer .social-icons a {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        /* Social Icons */
+        .social-facebook {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/733/733547.png');
+        }
+        .social-instagram {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2111/2111463.png');
+        }
+        .social-vimeo {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2111/2111646.png');
+        }
+        .social-linkedin {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/174/174857.png');
+        }
+
+        /* COPYRIGHT SECTION */
+        .copyright {
+            background: #1c1c1c;
+            color: #ccc;
+            text-align: center;
+            padding: 15px 10px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .qr-text-section h1 {
+                font-size: 2rem;
+            }
+            .qr-text-section p {
+                font-size: 1rem;
+            }
+            .qr-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .qr-code-container {
+                margin-bottom: 30px;
+            }
+            .about-section h2 {
+                font-size: 1.6rem;
+            }
+            .about-section p,
+            .about-section ul {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- QR CODE SECTION -->
+    <section class="qr-section">
+        <div class="qr-container">
+            <div class="qr-text-section">
+                <h1>SCAN QR CODE</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <button class="btn btn-custom">GET STARTED</button>
+            </div>
+
+            <div class="qr-code-container">
+                <!-- QR Code SVG -->
+                <div class="qr-code" id="qrCode">
+                    <svg viewBox="0 0 220 220" width="220" height="220" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="220" height="220" fill="#fff"/>
+                        <!-- Outer squares -->
+                        <rect x="10" y="10" width="60" height="60" fill="#000"/>
+                        <rect x="20" y="20" width="40" height="40" fill="#fff"/>
+                        <rect x="30" y="30" width="20" height="20" fill="#000"/>
+
+                        <rect x="150" y="10" width="60" height="60" fill="#000"/>
+                        <rect x="160" y="20" width="40" height="40" fill="#fff"/>
+                        <rect x="170" y="30" width="20" height="20" fill="#000"/>
+
+                        <rect x="10" y="150" width="60" height="60" fill="#000"/>
+                        <rect x="20" y="160" width="40" height="40" fill="#fff"/>
+                        <rect x="30" y="170" width="20" height="20" fill="#000"/>
+
+                        <!-- Inner pattern -->
+                        <rect x="80" y="50" width="20" height="20" fill="#000"/>
+                        <rect x="110" y="80" width="30" height="20" fill="#000"/>
+                        <rect x="80" y="110" width="20" height="20" fill="#000"/>
+                        <rect x="150" y="100" width="20" height="20" fill="#000"/>
+                        <rect x="140" y="150" width="10" height="10" fill="#000"/>
+                        <rect x="120" y="140" width="10" height="10" fill="#000"/>
+                        <rect x="100" y="130" width="10" height="10" fill="#000"/>
+                        <rect x="90" y="160" width="10" height="10" fill="#000"/>
+                    </svg>
+                </div>
+
+                <!-- Phone with scan animation -->
+                <!-- Inside your qr-code-container div -->
+<div class="phone" id="phone" #phone>
+  <div class="screen" id="phoneScreen">
+    <div class="scan-bar" id="scanBar" #scanBar></div>
+    <div class="medicine-name-screen" id="medicineScreenName" #medicineScreenName>Medicine name</div>
+  </div>
+</div>
+
+<div class="medicine-name" id="medicineNameBelow" #medicineNameBelow>Medicine name</div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section" id="about">
+       <section id="about-project" style="font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px;">
+  <h2 style="color: #2c3e50;">About This Project</h2>
+  <p>
+    The <strong>Supply Chain Management System for Medicines</strong> is a comprehensive web-based application designed to enhance transparency, traceability, and accountability within the pharmaceutical supply chain. It enables real-time tracking of medicine production and distribution — from the procurement of raw materials to the final delivery at retail outlets.
+  </p>
+  <h3 style="color: #34495e;">Purpose & Objectives</h3>
+  <ul>
+    <li><strong>Ensure authenticity:</strong> Combat counterfeit medicines by providing an immutable and verifiable record of each product's journey.</li>
+    <li><strong>Increase transparency:</strong> Allow all stakeholders — including manufacturers, suppliers, distributors, retailers, and consumers — to input and access critical data at every stage.</li>
+    <li><strong>Enhance safety and compliance:</strong> Facilitate regulatory adherence and quality control by maintaining accurate and up-to-date records.</li>
+    <li><strong>Improve efficiency:</strong> Streamline the supply chain by reducing manual paperwork and enabling swift data sharing across entities.</li>
+  </ul>
+  <h3 style="color: #34495e;">Key Features</h3>
+  <ul>
+    <li><strong>Multi-stakeholder input:</strong> Different user roles with secure login credentials allow authorized data entry and updates at each supply chain node.</li>
+    <li><strong>QR Code Generation:</strong> Each medicine batch is assigned a unique QR code that encapsulates its complete lifecycle information.</li>
+    <li><strong>Consumer Access:</strong> End consumers can scan the QR code on the medicine packaging using their smartphones to instantly view detailed production and distribution history, ensuring trust in product quality.</li>
+    <li><strong>Data Integrity:</strong> Use of robust backend databases and secure protocols to protect data against tampering and unauthorized access.</li>
+    <li><strong>Dashboard & Reports:</strong> Administrators and stakeholders can generate reports and analytics to monitor supply chain performance and identify bottlenecks.</li>
+  </ul>
+  <h3 style="color: #34495e;">Stakeholders Involved</h3>
+  <ol>
+    <li><strong>Raw Material Suppliers:</strong> Provide detailed information on the sourced ingredients.</li>
+    <li><strong>Manufacturers:</strong> Enter data regarding the production process, batch details, and quality checks.</li>
+    <li><strong>Distributors:</strong> Track logistics, storage conditions, and transportation details.</li>
+    <li><strong>Retailers:</strong> Confirm receipt and sale of medicines.</li>
+    <li><strong>Consumers:</strong> Access complete product history by scanning QR codes to verify authenticity.</li>
+  </ol>
+  <h3 style="color: #34495e;">Technologies Used</h3>
+  <p>
+    The system is built using modern web technologies for a seamless user experience and reliable backend operations. It typically includes:
+  </p>
+  <ul>
+    <li>Frontend: HTML5, CSS3, JavaScript (React/Vue/Angular as options)</li>
+    <li>Backend: Node.js / Python (Django/Flask) / Java (Spring Boot)</li>
+    <li>Database: SQL or NoSQL databases for storing supply chain data securely</li>
+    <li>QR Code Generation Libraries: To dynamically create unique QR codes linked with medicine data</li>
+    <li>Security: HTTPS, authentication protocols, and role-based access control</li>
+  </ul>
+  <p>
+    Overall, this project aims to revolutionize pharmaceutical supply chains by leveraging digital technology to foster transparency, safety, and trust — ultimately safeguarding public health.
+  </p>
+</section>
+
+    </section>
+
+    <!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-logo-text" style="text-align: center;">Medical Packaging</div>
+  <nav class="footer-nav" aria-label="Footer navigation">
+    <ul>
+      <li><strong>Home</strong></li>
+      <li><strong>About MPI</strong></li>
+      <li><strong>Markets</strong></li>
+      <li><strong>Products</strong></li>
+      <li><strong>News</strong></li>
+      <li><strong>Contact</strong></li>
+      <li><strong>Privacy Policy</strong></li>
+      <li><strong>Terms and Conditions</strong></li>
+      <li><strong>Terms of Use Agreement</strong></li>
+    </ul>
+  </nav>
+  <section class="footer-about" aria-label="About MPI">
+    <h3>About MPI</h3>
+    <p>
+      Established in 1971, Medical Packaging Inc., LLC (MPI) is a trusted manufacturer of pharmaceutical packaging and labeling systems, pharmacy packaging systems, medication and medicine packaging and labeling machines, unit dose and pill packaging and labeling materials, syringe filling and labeling machines, and much more for customers in a range of markets throughout the world.
+    </p>
+  </section>
+  <section class="footer-contact" aria-label="Get in Touch">
+    <h3>Get in Touch</h3>
+    <p>📞 609.466.8991<br />Toll-free: 800.257.5282</p>
+    <p>✉️ info&commat;medpak.com</p>
+    <p>📍 8 Kings Court<br />Flemington, New Jersey 08822</p>
+    <div class="social-icons" aria-label="Social media links">
+      <a href="#" class="social-facebook" aria-label="Facebook" target="_blank" rel="noopener"></a>
+      <a href="#" class="social-instagram" aria-label="Instagram" target="_blank" rel="noopener"></a>
+      <a href="#" class="social-vimeo" aria-label="Vimeo" target="_blank" rel="noopener"></a>
+      <a href="#" class="social-linkedin" aria-label="LinkedIn" target="_blank" rel="noopener"></a>
+    </div>
+  </section>
+</footer>
+
+
+    <div class="copyright">© 2025 MEDISAFE. All rights reserved.</div>
+
+    <!-- JS for scan animation -->
+    <script>
+        const phone = document.getElementById('phone');
+        const scanBar = document.getElementById('scanBar');
+        const medicineNameScreen = document.getElementById('medicineScreenName');
+        const medicineNameBelow = document.getElementById('medicineNameBelow');
+
+        const texts = ["Medicine name", "Distribute", "Retail Sale", "Delivered"];
+        let index = 0;
+
+        function runScanAnimation() {
+            // Reset states
+            phone.style.transition = 'none';
+            phone.style.opacity = '0';
+            phone.style.top = '270px';
+            phone.style.right = '-140px';
+            medicineNameBelow.style.opacity = '0';
+            medicineNameScreen.style.opacity = '0';
+            scanBar.style.opacity = '0';
+            scanBar.style.top = '-40px';
+            scanBar.style.animation = '';
+
+            // Update text content for this cycle
+            medicineNameScreen.textContent = texts[index];
+            medicineNameBelow.textContent = texts[index];
+
+            setTimeout(() => {
+                // Slide phone in and up
+                phone.style.transition = 'all 2s ease';
+                phone.style.opacity = '1';
+                phone.style.top = '30px';
+                phone.style.right = '0px';
+            }, 50);
+
+            setTimeout(() => {
+                // Show scan bar animation
+                scanBar.style.opacity = '1';
+                scanBar.style.animation = 'scanAnim 2.5s ease forwards';
+            }, 2300);
+
+            setTimeout(() => {
+                // Show medicine name on phone screen
+                medicineNameScreen.style.opacity = '1';
+            }, 4300);
+
+            setTimeout(() => {
+                // Fade out phone
+                phone.style.opacity = '0';
+                medicineNameScreen.style.opacity = '0';
+                scanBar.style.opacity = '0';
+                scanBar.style.animation = '';
+            }, 6000);
+
+            setTimeout(() => {
+                // Show medicine name below QR code
+                medicineNameBelow.style.opacity = '1';
+            }, 6300);
+
+            // Increment index and loop back
+            index = (index + 1) % texts.length;
+        }
+
+        // Run animation every 10 seconds
+        runScanAnimation();
+        setInterval(runScanAnimation, 10000);
+    </script>
+</body>
+</html>

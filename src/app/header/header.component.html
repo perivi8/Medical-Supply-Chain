@@ -1,0 +1,73 @@
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-primary px-3 d-flex justify-content-between align-items-center">
+  <!-- Logo + Title -->
+  <div class="d-flex align-items-center">
+    <span class="navbar-brand mb-0">Chain Management </span>
+  </div>
+
+  <!-- Mobile Toggler -->
+  <button class="navbar-toggler d-lg-none" type="button" (click)="toggleMobileMenu()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Desktop Center Nav -->
+  <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
+    <ul class="navbar-nav flex-row gap-3">
+      <li class="nav-item"><a class="nav-link text-white" routerLink="/home" style="cursor: pointer;">Home</a></li>
+      <li class="nav-item"><a class="nav-link text-white" (click)="goToAbout()" style="cursor: pointer;">About</a></li>
+      <li class="nav-item"><a class="nav-link text-white" (click)="goTocontact()" style="cursor: pointer;">Contact</a></li>
+      <li class="nav-item"><a class="nav-link text-white" routerLink="/consumer">Consumer</a></li>
+    </ul>
+  </div>
+
+  <!-- Desktop Auth -->
+  <div class="d-none d-lg-flex align-items-center ms-auto gap-2">
+    <ng-container *ngIf="!user; else loggedIn">
+      <a routerLink="/login" class="btn btn-outline-light btn-sm">Login</a>
+      <a routerLink="/register" class="btn btn-light btn-sm">Register</a>
+    </ng-container>
+
+    <ng-template #loggedIn>
+      <div class="dropdown d-flex align-items-center">
+        <button class="btn btn-light btn-sm dropdown-toggle d-flex align-items-center" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fa-solid fa-user me-2"></i>
+          <span>{{ user?.first_name }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </ng-template>
+  </div>
+</nav>
+
+<!-- Mobile Menu Side Panel -->
+<div class="mobile-menu" *ngIf="showMobileMenu" (click)="closeMobileMenu()">
+  <div class="mobile-nav-panel" (click)="$event.stopPropagation()">
+
+    <!-- Auth Top Row -->
+    <div class="d-flex justify-content-between align-items-center px-3 pb-2">
+      <ng-container *ngIf="!user">
+        <a routerLink="/login" (click)="closeMobileMenu()" class="btn btn-outline-primary btn-sm me-2">Login</a>
+        <a routerLink="/register" (click)="closeMobileMenu()" class="btn btn-primary btn-sm">Register</a>
+      </ng-container>
+
+      <ng-container *ngIf="user">
+        <div class="d-flex align-items-center">
+          <i class="fa-solid fa-user me-2"></i>
+          <span>{{ user?.first_name }}</span>
+        </div>
+        <button class="btn btn-outline-danger btn-sm ms-2" (click)="logout()">Logout</button>
+      </ng-container>
+    </div>
+
+    <!-- Navigation Links -->
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><a routerLink="/home" (click)="closeMobileMenu()">Home</a></li>
+      <li class="list-group-item"><a routerLink="/about" (click)="closeMobileMenu()">About</a></li>
+      <li class="list-group-item"><a routerLink="/contact" (click)="closeMobileMenu()">Contact</a></li>
+      <li class="list-group-item"><a routerLink="/consumer" (click)="closeMobileMenu()">Consumer</a></li>
+    </ul>
+  </div>
+</div>
