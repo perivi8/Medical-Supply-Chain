@@ -6,7 +6,7 @@ import { BarcodeFormat } from '@zxing/library';
 @Component({
   selector: 'app-consumer',
   templateUrl: './consumer.component.html',
-  styleUrls: []
+  styleUrls: ['./consumer.component.scss']
 })
 export class ConsumerComponent implements OnInit {
   medicineId: string = '';
@@ -14,8 +14,9 @@ export class ConsumerComponent implements OnInit {
   history: any = null;
   error: string | null = null;
   isScanning: boolean = false;
+  isLoading: boolean = false;
   availableDevices: MediaDeviceInfo[] = [];
-  currentDevice: MediaDeviceInfo | undefined;  // ✅ updated from `null`
+  currentDevice: MediaDeviceInfo | undefined;
   formatsEnabled: BarcodeFormat[] = [BarcodeFormat.QR_CODE];
   hasCamera: boolean = false;
 
@@ -33,8 +34,16 @@ export class ConsumerComponent implements OnInit {
       navigator.mediaDevices.enumerateDevices().then(devices => {
         this.availableDevices = devices.filter(d => d.kind === 'videoinput');
         this.hasCamera = this.availableDevices.length > 0;
-        this.currentDevice = this.availableDevices[0]; // ✅ updated from `|| null`
+        this.currentDevice = this.availableDevices[0];
+        console.log('Available cameras:', this.availableDevices);
+      }).catch(err => {
+        console.error('Error enumerating devices:', err);
+        this.error = 'Failed to access camera devices.';
+        this.hasCamera = false;
       });
+    } else {
+      this.error = 'Camera not supported in this browser.';
+      this.hasCamera = false;
     }
 
     // Load medicine list
@@ -42,11 +51,11 @@ export class ConsumerComponent implements OnInit {
       next: (data) => {
         this.medicines = data;
         if (data.length === 0) {
-          this.error = 'No medicines available. Please check back later.';
+          console.log('No medicines available, scanner still functional.');
         }
       },
       error: (err) => {
-        this.error = 'Failed to load medicines. Please check the server.';
+        this.error = 'Failed to load medicines. Scanner is still available.';
         console.error('Medicines fetch error:', err);
       }
     });
@@ -54,6 +63,7 @@ export class ConsumerComponent implements OnInit {
     // Load from route param if available
     const medicineId = this.route.snapshot.paramMap.get('id');
     if (medicineId && medicineId !== '0') {
+      console.log('Loading history from route param:', medicineId);
       this.medicineId = medicineId;
       this.fetchProductHistory(medicineId);
     }
@@ -68,21 +78,26 @@ export class ConsumerComponent implements OnInit {
       this.error = 'Camera not available in this browser or device.';
       this.isScanning = false;
     }
+    console.log('Scanner toggled:', this.isScanning);
   }
 
   onScanSuccess(result: string) {
+    console.log('Scanned QR code:', result);
     const match = result.match(/\/consumer\/(\d+)/);
     if (match && match[1]) {
       this.medicineId = match[1];
       this.isScanning = false;
+      console.log('Extracted ID:', this.medicineId);
       this.fetchProductHistory(this.medicineId);
     } else {
-      this.error = 'Invalid QR code. Please scan a valid medicine QR code.';
+      this.error = 'Invalid QR code format. Expected /consumer/<id>.';
+      console.log('Regex match failed for:', result);
     }
   }
 
   onScanError(error: any) {
-    this.error = 'Scanner error: Unable to read QR code. Please try again.';
+    this.error = 'Scanner error: Unable to read QR code. Ensure the QR code is clear and well-lit.';
+    this.isScanning = false;
     console.error('Scan error:', error);
   }
 
@@ -93,6 +108,7 @@ export class ConsumerComponent implements OnInit {
       this.error = 'Please enter a valid medicine ID.';
       return;
     }
+    console.log('Submitting manual ID:', this.medicineId);
     this.fetchProductHistory(this.medicineId);
   }
 
@@ -100,19 +116,25 @@ export class ConsumerComponent implements OnInit {
     this.medicineId = id;
     this.error = null;
     this.history = null;
+    console.log('Selected medicine ID:', id);
     this.fetchProductHistory(this.medicineId);
   }
 
   private fetchProductHistory(id: string) {
-    this.http.get(`${this.apiUrl}/product_history/${id}`).subscribe({
+    this.isLoading = true;
+    console.log('Fetching history for ID:', id);
+    this.http.get(`${this.apiUrl}/consumer/${id}`).subscribe({
       next: (data: any) => {
+        console.log('History data:', data);
         this.history = data;
         this.router.navigate([`/consumer/${id}`]);
+        this.isLoading = false;
       },
       error: (err) => {
         this.error = 'Failed to load product history. Please try again.';
         this.history = null;
-        console.error('Product history fetch error:', err);
+        this.isLoading = false;
+        console.error('History fetch error:', err);
       }
     });
   }
