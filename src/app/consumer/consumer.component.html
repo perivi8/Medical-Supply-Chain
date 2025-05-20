@@ -1,100 +1,552 @@
-<!-- Page Container -->
-<div class="form-background d-flex justify-content-center align-items-start py-5 min-vh-100">
-  <div class="container bg-white bg-opacity-75 rounded shadow-lg p-4" style="max-width: 700px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medicine Journey Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    @import "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css";
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-    <!-- Title -->
-    <h2 class="text-center mb-4 animate__animated animate__fadeInDown fw-bold text-primary">
-      Consumer - Medicine Journey
-    </h2>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+    }
 
-    <!-- QR Code Scanner Section -->
-    <div class="mb-4">
-      <h5 class="fw-semibold mb-2">Scan QR Code</h5>
-      <button
-        (click)="toggleScanner()"
-        class="btn btn-outline-primary w-100 mb-2"
-        [disabled]="!hasCamera">
-        {{ isScanning ? 'Stop Scanning' : 'Start Scanning' }}
-      </button>
+    .form-background {
+      background-image: url('https://source.unsplash.com/1600x900/?farm,field');
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
 
-      <div *ngIf="isScanning" class="border rounded overflow-hidden">
-        <zxing-scanner
-          [device]="currentDevice"
-          [formats]="formatsEnabled"
-          (scanSuccess)="onScanSuccess($event)"
-          (scanError)="onScanError($event)"
-          class="w-100">
-        </zxing-scanner>
+    .form-background::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      max-width: 700px;
+      width: 100%;
+      transition: transform 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h2 {
+      font-weight: 600;
+      color: #2c3e50;
+      margin: 0 0 1.5rem 0;
+      text-align: center;
+      font-size: 1.6rem;
+    }
+
+    h5 {
+      font-weight: 500;
+      color: #34495e;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-label {
+      font-weight: 500;
+      color: #34495e;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-control {
+      border: 1px solid #dfe6e9;
+      border-radius: 8px;
+      padding: 0.65rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      background: #f9f9f9;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      background: #fff;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem;
+      font-weight: 500;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #2980b9, #2c3e50);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-outline-primary {
+      border: 1px solid #3498db;
+      color: #3498db;
+      border-radius: 8px;
+      padding: 0.8rem;
+      font-weight: 500;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .btn-outline-primary:hover {
+      background: #3498db;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-outline-primary:disabled {
+      border-color: #6c757d;
+      color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .text-success {
+      background: #e8f5e9;
+      padding: 0.6rem;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .alert-danger {
+      background: #ffebee;
+      padding: 0.6rem;
+      border-radius: 8px;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    /* Timeline Container */
+    .timeline {
+      position: relative;
+      padding-left: 2.5rem;
+      margin: 0;
+    }
+
+    /* Vertical Line */
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0.75rem;
+      width: 4px;
+      height: 100%;
+      background: #dfe6e9;
+      z-index: 1;
+    }
+
+    /* Timeline Item */
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    /* Timeline Marker */
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -2.25rem;
+      top: 1rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 50%;
+      z-index: 3;
+    }
+
+    /* Verified Checkmark */
+    .verified-checkmark {
+      color: #28a745;
+      font-size: 1.2rem;
+      margin-left: 1rem;
+      align-self: center;
+    }
+
+    /* Specific Colors for Each Stage */
+    .timeline-item.farmer {
+      border-left: 3px solid #28a745;
+      background: #e8f5e9;
+    }
+    .timeline-item.farmer::before {
+      background: #28a745;
+      border: 2px solid #fff;
+    }
+
+    .timeline-item.manufacturer {
+      border-left: 3px solid #3498db;
+      background: #e7f3fe;
+    }
+    .timeline-item.manufacturer::before {
+      background: #3498db;
+      border: 2px solid #fff;
+    }
+
+    .timeline-item.distributor {
+      border-left: 3px solid #ffc107;
+      background: #fff3cd;
+    }
+    .timeline-item.distributor::before {
+      background: #ffc107;
+      border: 2px solid #fff;
+    }
+
+    .timeline-item.retailer {
+      border-left: 3px solid #dc3545;
+      background: #f8d7da;
+    }
+    .timeline-item.retailer::before {
+      background: #dc3545;
+      border: 2px solid #fff;
+    }
+
+    .timeline-item h5 {
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-item p {
+      margin: 0.25rem 0;
+      font-size: 0.9rem;
+      color: #34495e;
+    }
+
+    .timeline-item .content {
+      flex: 1;
+    }
+
+    .spinner-border {
+      width: 2rem;
+      height: 2rem;
+      border-width: 0.3rem;
+    }
+
+    zxing-scanner {
+      display: block;
+      width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    app-footer {
+      margin-top: 1rem;
+      width: 100%;
+      z-index: 2;
+    }
+
+    @media (max-width: 768px) {
+      .form-background {
+        padding: 0.5rem;
+        justify-content: flex-start;
+        min-height: auto;
+      }
+
+      .container {
+        padding: 1.25rem;
+        max-width: 95%;
+        margin: 1rem auto 1rem auto;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1.25rem;
+      }
+
+      h5 {
+        font-size: 0.95rem;
+      }
+
+      .form-label {
+        font-size: 0.85rem;
+      }
+
+      .form-control {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+      }
+
+      .btn-primary, .btn-outline-primary {
+        font-size: 0.95rem;
+        padding: 0.75rem;
+      }
+
+      .text-success, .alert-danger {
+        font-size: 0.85rem;
+      }
+
+      .timeline {
+        padding-left: 2rem;
+      }
+
+      .timeline::before {
+        left: 0.5rem;
+      }
+
+      .timeline-item {
+        padding: 0.75rem;
+      }
+
+      .timeline-item::before {
+        left: -1.75rem;
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .timeline-item p {
+        font-size: 0.85rem;
+      }
+
+      .verified-checkmark {
+        font-size: 1rem;
+      }
+
+      zxing-scanner {
+        max-height: 200px;
+      }
+
+      app-footer {
+        margin-top: 0.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .form-background {
+        padding: 0.25rem;
+      }
+
+      .container {
+        padding: 1rem;
+        border-radius: 0.75rem;
+        margin: 0.75rem auto 0.75rem auto;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      h5 {
+        font-size: 0.9rem;
+      }
+
+      .form-label {
+        font-size: 0.8rem;
+      }
+
+      .form-control {
+        font-size: 0.85rem;
+        padding: 0.55rem;
+      }
+
+      .btn-primary, .btn-outline-primary {
+        font-size: 0.9rem;
+        padding: 0.7rem;
+      }
+
+      .text-success, .alert-danger {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+      }
+
+      .timeline {
+        padding-left: 1.5rem;
+      }
+
+      .timeline::before {
+        left: 0.25rem;
+      }
+
+      .timeline-item {
+        padding: 0.6rem;
+      }
+
+      .timeline-item::before {
+        left: -1.25rem;
+        width: 0.8rem;
+        height: 0.8rem;
+      }
+
+      .timeline-item p {
+        font-size: 0.8rem;
+      }
+
+      .verified-checkmark {
+        font-size: 0.9rem;
+      }
+
+      zxing-scanner {
+        max-height: 150px;
+      }
+
+      app-footer {
+        margin-top: 0.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <app-header></app-header>
+<br><br><br>
+  <div class="form-background animate__animated animate__fadeIn">
+    <div class="container">
+      <h2 class="animate__animated animate__fadeInDown">Consumer - Medicine Journey</h2>
+
+      <!-- QR Code Scanner Section -->
+      <div class="mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+        <h5 class="fw-semibold mb-2">Scan QR Code</h5>
+        <button
+          (click)="toggleScanner()"
+          class="btn btn-outline-primary w-100 mb-2"
+          [disabled]="!hasCamera">
+          {{ isScanning ? 'Stop Scanning' : 'Start Scanning' }}
+        </button>
+
+        <div *ngIf="isScanning" class="border rounded overflow-hidden">
+          <zxing-scanner
+            [device]="currentDevice"
+            [formats]="formatsEnabled"
+            (scanSuccess)="onScanSuccess($event)"
+            (scanError)="onScanError($event)"
+            class="w-100">
+          </zxing-scanner>
+        </div>
+      </div>
+
+      <!-- Manual ID Entry Form -->
+      <form (ngSubmit)="onSubmit()" class="mb-4">
+        <div class="mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+          <label class="form-label">Enter Medicine ID</label>
+          <input
+            type="text"
+            [(ngModel)]="medicineId"
+            name="medicineId"
+            class="form-control"
+            placeholder="Enter Medicine ID (e.g., MED123)"
+            required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+          View History
+        </button>
+      </form>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading" class="text-center mt-3 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Product History Section -->
+      <div *ngIf="history && !isLoading" class="timeline">
+        <!-- Farmer (Raw Material) -->
+        <div *ngIf="history.raw_material" class="timeline-item farmer mb-4 p-3 animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+          <div class="content">
+            <h5 class="fw-bold" style="color: #28a745;">Farmer</h5>
+            <p>Type: {{ history.raw_material.material_type }}</p>
+            <p>Quantity: {{ history.raw_material.quantity }} kg</p>
+            <p>Location: {{ history.raw_material.source_location }}</p>
+            <p>Date: {{ history.raw_material.supply_date }}</p>
+          </div>
+          <span class="verified-checkmark fas fa-check-circle"></span>
+        </div>
+
+        <!-- Manufacturer -->
+        <div *ngIf="history.medicine" class="timeline-item manufacturer mb-4 p-3 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+          <div class="content">
+            <h5 class="fw-bold" style="color: #3498db;">Manufacturer</h5>
+            <p>Name: {{ history.medicine.medicine_name }}</p>
+            <p>Batch: {{ history.medicine.batch_number }}</p>
+            <p>Production: {{ history.medicine.production_date }}</p>
+            <p>Expiry: {{ history.medicine.expiry_date }}</p>
+          </div>
+          <span class="verified-checkmark fas fa-check-circle"></span>
+        </div>
+
+        <!-- Distributor -->
+        <div *ngFor="let dist of history?.distributions; let i = index" class="timeline-item distributor mb-4 p-3 animate__animated animate__fadeInUp" [style.animation-delay]="0.7 + i * 0.1 + 's'">
+          <div class="content">
+            <h5 class="fw-bold" style="color: #ffc107;">Distributor</h5>
+            <p>Shipment: {{ dist.shipment_date }}</p>
+            <p>Transport: {{ dist.transport_method }}</p>
+            <p>Destination: {{ dist.destination }}</p>
+            <p>Storage: {{ dist.storage_condition }}</p>
+          </div>
+          <span class="verified-checkmark fas fa-check-circle"></span>
+        </div>
+
+        <!-- Retailer -->
+        <div *ngFor="let sale of history?.retail_sales; let i = index" class="timeline-item retailer mb-4 p-3 animate__animated animate__fadeInUp" [style.animation-delay]="0.7 + (history?.distributions?.length || 0) * 0.1 + i * 0.1 + 's'">
+          <div class="content">
+            <h5 class="fw-bold" style="color: #dc3545;">Retailer</h5>
+            <p>Received: {{ sale.received_date }}</p>
+            <p>Price: ${{ sale.price }}</p>
+            <p>Location: {{ sale.retail_location }}</p>
+          </div>
+          <span class="verified-checkmark fas fa-check-circle"></span>
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-danger text-center mt-3 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+        {{ error }}
       </div>
     </div>
 
-    <!-- Manual ID Entry Form -->
-    <form (ngSubmit)="onSubmit()" class="mb-4">
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Enter Medicine ID</label>
-        <input
-          type="text"
-          [(ngModel)]="medicineId"
-          name="medicineId"
-          class="form-control"
-          placeholder="Enter Medicine ID"
-          required>
-      </div>
-      <button type="submit" class="btn btn-primary w-100">View History</button>
-    </form>
-
-    <!-- Loading Spinner -->
-    <div *ngIf="isLoading" class="text-center mt-3">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-
-    <!-- Product History Section -->
-    <div *ngIf="history && !isLoading" class="timeline">
-      <!-- Raw Material -->
-      <div *ngIf="history.raw_material" class="timeline-item mb-4 p-3 border-start border-3 border-primary bg-light rounded">
-        <h5 class="fw-bold text-primary">Raw Material</h5>
-        <p>Type: {{ history.raw_material.material_type }}</p>
-        <p>Quantity: {{ history.raw_material.quantity }} kg</p>
-        <p>Location: {{ history.raw_material.source_location }}</p>
-        <p>Date: {{ history.raw_material.supply_date }}</p>
-      </div>
-
-      <!-- Manufacturing -->
-      <div *ngIf="history.medicine" class="timeline-item mb-4 p-3 border-start border-3 border-success bg-light rounded">
-        <h5 class="fw-bold text-success">Manufacturing</h5>
-        <p>Name: {{ history.medicine.medicine_name }}</p>
-        <p>Batch: {{ history.medicine.batch_number }}</p>
-        <p>Production: {{ history.medicine.production_date }}</p>
-        <p>Expiry: {{ history.medicine.expiry_date }}</p>
-      </div>
-
-      <!-- Distribution -->
-      <div *ngFor="let dist of history?.distributions" class="timeline-item mb-4 p-3 border-start border-3 border-warning bg-light rounded">
-        <h5 class="fw-bold text-warning">Distribution</h5>
-        <p>Shipment: {{ dist.shipment_date }}</p>
-        <p>Transport: {{ dist.transport_method }}</p>
-        <p>Destination: {{ dist.destination }}</p>
-        <p>Storage: {{ dist.storage_condition }}</p>
-      </div>
-
-      <!-- Retail Sales -->
-      <div *ngFor="let sale of history?.retail_sales" class="timeline-item mb-4 p-3 border-start border-3 border-danger bg-light rounded">
-        <h5 class="fw-bold text-danger">Retail</h5>
-        <p>Received: {{ sale.received_date }}</p>
-        <p>Price: ${{ sale.price }}</p>
-        <p>Location: {{ sale.retail_location }}</p>
-      </div>
-    </div>
-
-    <!-- Error Message -->
-    <div *ngIf="error" class="alert alert-danger text-center mt-3" role="alert">
-      {{ error }}
-    </div>
-
+    <!-- Footer -->
   </div>
-</div>
-
-<!-- Footer -->
-<app-footer></app-footer>
+  <app-footer></app-footer>
+</body>
+</html>

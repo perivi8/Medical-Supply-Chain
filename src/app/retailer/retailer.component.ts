@@ -87,6 +87,17 @@ export class RetailerComponent implements OnInit {
     this.qrCodeBase64 = null;
   }
 
+  downloadQRCode() {
+    if (this.qrCodeBase64) {
+      const link = document.createElement('a');
+      link.href = this.qrCodeBase64;
+      link.download = 'retail_sale_qr_code.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
   private resetForm() {
     this.distribution_id = null;
     this.received_date = '';

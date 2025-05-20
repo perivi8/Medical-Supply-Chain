@@ -1,11 +1,11 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit, OnDestroy {
   @ViewChild('phone') phone!: ElementRef;
   @ViewChild('scanBar') scanBar!: ElementRef;
   @ViewChild('medicineScreenName') medicineScreenName!: ElementRef;

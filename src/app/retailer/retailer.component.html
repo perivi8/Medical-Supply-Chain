@@ -1,26 +1,296 @@
-<!-- Full-Screen Centered Retail Form -->
-<div class="form-background d-flex justify-content-center align-items-center">
-  <div class="container bg-white bg-opacity-75 rounded shadow-lg p-4" style="max-width: 550px;">
-    <h2 class="text-center mb-4 animate__animated animate__fadeInDown fw-bold text-primary">
-      Retailer - Add Retail Sale
-    </h2>
+<style>
+@import "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-    <!-- Success Message and QR Code (above form) -->
-    <div *ngIf="success" class="text-center text-success fw-semibold">
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+}
+
+.form-background {
+  background-image: url('https://source.unsplash.com/1600x900/?farm,field');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(8px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+  z-index: 1;
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  max-width: 550px;
+  width: 100%;
+  transition: transform 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.container:hover {
+  transform: translateY(-5px);
+}
+
+h2 {
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+h5 {
+  font-weight: 500;
+  color: #34495e;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #34495e;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+.form-control, .form-select {
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  padding: 0.65rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-control:focus, .form-select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  background: #fff;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #3498db, #2980b9);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-weight: 500;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #2980b9, #2c3e50);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-download {
+  background: linear-gradient(90deg, #2ecc71, #27ae60);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-weight: 500;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btn-download:hover {
+  background: linear-gradient(90deg, #27ae60, #219653);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.text-success {
+  background: #e8f5e9;
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.text-danger {
+  background: #ffebee;
+  padding: 0.6rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.text-muted {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+img.img-thumbnail {
+  max-width: 50%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0.5rem auto;
+  display: block;
+}
+
+app-footer {
+  margin-top: 1rem;
+  width: 100%;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .form-background {
+    padding: 0.5rem;
+    justify-content: flex-start;
+    min-height: auto;
+  }
+
+  .container {
+    padding: 1.25rem;
+    max-width: 95%;
+    margin: 1rem auto 1rem auto;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  h5 {
+    font-size: 0.95rem;
+  }
+
+  .form-label {
+    font-size: 0.85rem;
+  }
+
+  .form-control, .form-select {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .btn-primary, .btn-download {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+
+  .text-success, .text-danger, .text-muted {
+    font-size: 0.85rem;
+  }
+
+  img.img-thumbnail {
+    max-width: 60%;
+  }
+
+  app-footer {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-background {
+    padding: 0.25rem;
+  }
+
+  .container {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin: 0.75rem auto 0.75rem auto;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  h5 {
+    font-size: 0.9rem;
+  }
+
+  .form-label {
+    font-size: 0.8rem;
+  }
+
+  .form-control, .form-select {
+    font-size: 0.85rem;
+    padding: 0.55rem;
+  }
+
+  .btn-primary, .btn-download {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+
+  .text-success, .text-danger, .text-muted {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  img.img-thumbnail {
+    max-width: 70%;
+  }
+
+  app-footer {
+    margin-top: 0.25rem;
+  }
+}
+</style>
+<app-header></app-header>
+<br><br><br>
+<div class="form-background animate__animated animate__fadeIn">
+  <div class="container">
+    <h2 class="animate__animated animate__fadeInDown">Retailer - Add Retail Sale</h2>
+
+    <!-- Success Message and QR Code -->
+    <div *ngIf="success" class="text-success animate__animated animate__fadeIn">
       {{ success }}
       <div *ngIf="qrCodeBase64" class="mt-3">
         <h5 class="fw-bold">Generated QR Code</h5>
-        <img [src]="qrCodeBase64" alt="QR Code" class="img-thumbnail w-50">
+        <img [src]="qrCodeBase64" alt="QR Code" class="img-thumbnail">
+        <button class="btn btn-download animate__animated animate__fadeInUp" style="animation-delay: 0.6s;" (click)="downloadQRCode()">Download QR Code</button>
       </div>
     </div>
 
     <!-- Error Message -->
-    <div *ngIf="error" class="text-danger text-center mt-3">{{ error }}</div>
+    <div *ngIf="error" class="text-danger animate__animated animate__fadeIn">
+      {{ error }}
+    </div>
 
-    <!-- Retail Sale Form (always visible) -->
-    <form (ngSubmit)="onSubmit()" class="mt-4">
+    <!-- Retail Sale Form -->
+    <form (ngSubmit)="onSubmit()" class="mt-3">
       <!-- Distribution Selection -->
-      <div class="mb-3">
+      <div class="mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
         <h5 class="fw-semibold mb-2">Select Distribution</h5>
         <select
           [(ngModel)]="distribution_id"
@@ -39,8 +309,8 @@
       </div>
 
       <!-- Received Date -->
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Received Date</label>
+      <div class="mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+        <label class="form-label">Received Date</label>
         <input
           type="date"
           [(ngModel)]="received_date"
@@ -50,34 +320,34 @@
       </div>
 
       <!-- Price -->
-      <div class="mb-3">
-        <label class="form-label fw-semibold">Price ($)</label>
+      <div class="mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+        <label class="form-label">Price ($)</label>
         <input
           type="number"
           [(ngModel)]="price"
           name="price"
           class="form-control"
-          placeholder="Enter price"
+          placeholder="Enter price (e.g., 29.99)"
           step="0.01"
           required>
       </div>
 
       <!-- Retail Location -->
-      <div class="mb-4">
-        <label class="form-label fw-semibold">Retail Location</label>
+      <div class="mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+        <label class="form-label">Retail Location</label>
         <input
           type="text"
           [(ngModel)]="retail_location"
           name="retail_location"
           class="form-control"
-          placeholder="Enter retail location"
+          placeholder="Enter retail location (e.g., City Pharmacy)"
           required>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">Add Retail Sale</button>
+      <button type="submit" class="btn btn-primary animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+        Add Retail Sale
+      </button>
     </form>
   </div>
 </div>
-
-<!-- Footer (outside centered layout) -->
 <app-footer></app-footer>

@@ -65,3 +65,226 @@
     font-size: 1.3rem;
   }
 }
+
+@media (max-width: 600px) {
+    .qr-text-section h1 {
+        font-size: 2rem;
+    }
+    .qr-text-section p {
+        font-size: 1rem;
+    }
+    .qr-container {
+        flex-direction: column;
+        align-items: center; /* Center flex items horizontally */
+        text-align: center;
+    }
+    .qr-code-container {
+        margin: 0 auto; /* Center the QR code container horizontally */
+        margin-bottom: 30px;
+    }
+    .phone {
+        right: -60px; /* Adjust to prevent overflow and align better */
+    }
+}
+
+.main-banner {
+  background: linear-gradient(145deg, #f3f4f6, #ffffff);
+  padding: 55px 0;
+}
+
+.banner-left-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 500px; // Ensure the background is visible
+}
+
+/* Optional: Add a semi-transparent overlay for better text readability */
+.banner-left-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  // background: rgba(0, 0, 0, 0.3); // Adjust opacity as needed
+  z-index: 1;
+}
+
+.left-content {
+  padding: 20px;
+  position: relative;
+  z-index: 2; // Ensure content is above the overlay
+}
+
+.header-text h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff; // Change to white for better contrast
+  margin-bottom: 20px;
+}
+
+.header-text p {
+  font-size: 16px;
+  color: #f0f0f0; // Lighter color for readability
+  line-height: 1.6;
+}
+
+.white-button {
+  display: inline-block;
+  margin: 10px 10px 0 0;
+}
+
+.white-button a {
+  background: #fff;
+  color: #3a8bcd;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.white-button a:hover {
+  background: #3a8bcd;
+  color: #fff;
+}
+
+.right-image {
+  position: relative;
+  text-align: center;
+}
+
+.right-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.scan-bar {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 5px;
+  background: #3a8bcd;
+  opacity: 0;
+}
+
+.medicine-screen-name,
+.medicine-name-below {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  color: #2a2a2a;
+  font-weight: 500;
+  opacity: 0;
+}
+
+.medicine-screen-name {
+  top: 20%;
+}
+
+.medicine-name-below {
+  bottom: 10%;
+}
+
+@keyframes scanAnim {
+  0% {
+    top: -40px;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+
+.left-content {
+  padding-top: 200px;
+}
+
+/* Media query for mobile view */
+@media only screen and (max-width: 767px) {
+  .left-content {
+    padding-top: 60px !important;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .white-button a {
+   background-color: #2dd4fb !important;
+   color: white;
+  }
+}
+
+.container {
+    // background-image: url(../assets/banner1.png);
+    background-repeat: no-repeat;
+    margin-left: 0px;
+    background-size: contain;
+    // background-position: center; /* Optional: centers the image */
+    height: 100vh; /* Adjust height as needed, e.g., full viewport height */
+}
+
+       .about-section {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .about-heading {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff6f61, #007bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .about-text {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .grid-box {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .grid-box:hover {
+            transform: translateY(-5px);
+       background: linear-gradient(90deg, #2dd4fb, #3e24ffbe);
+        }
+        .grid-box i {
+            font-size: 2.5em;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .grid-box h3 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #333;
+        }
+        .grid-box p {
+            font-size: 1em;
+            color: #666;
+            line-height: 1.4;
+        }
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .grid-box {
+                margin: 0 10px;
+            }
+        }
