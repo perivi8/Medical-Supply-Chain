@@ -18,7 +18,6 @@ export class DistributorComponent implements OnInit {
   medicines: { id: number; medicine_name: string; batch_number: string }[] = [];
   success: string | null = null;
   error: string | null = null;
-  qrCodeBase64: string | null = null;
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -52,7 +51,6 @@ export class DistributorComponent implements OnInit {
   onSubmit() {
     this.error = null;
     this.success = null;
-    this.qrCodeBase64 = null;
 
     if (!this.user_id || !this.medicine_id || !this.shipment_date || !this.transport_method || !this.destination || !this.storage_condition) {
       this.error = 'Please fill in all fields.';
@@ -70,8 +68,7 @@ export class DistributorComponent implements OnInit {
 
     this.http.post(`${this.apiUrl}/distribution`, distribution).subscribe({
       next: (response: any) => {
-        this.success = response.message || 'Distribution added successfully. QR code generated.';
-        this.qrCodeBase64 = response.qr_code;
+        this.success = response.message || 'Distribution added successfully.';
         this.resetForm();
         this.loadMedicines(); // Refresh dropdown after submission
       },
@@ -86,7 +83,6 @@ export class DistributorComponent implements OnInit {
     this.medicine_id = parseInt(id, 10);
     this.error = null;
     this.success = null;
-    this.qrCodeBase64 = null;
   }
 
   private resetForm() {

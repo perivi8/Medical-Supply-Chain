@@ -18,7 +18,6 @@ export class ManufacturerComponent implements OnInit {
   raw_materials: { id: number; material_type: string; quantity: number }[] = [];
   success: string | null = null;
   error: string | null = null;
-  qrCodeBase64: string | null = null;
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -52,7 +51,6 @@ export class ManufacturerComponent implements OnInit {
   onSubmit() {
     this.error = null;
     this.success = null;
-    this.qrCodeBase64 = null;
 
     if (!this.user_id || !this.raw_material_id || !this.medicine_name || !this.batch_number || !this.production_date || !this.expiry_date) {
       this.error = 'Please fill in all fields.';
@@ -70,8 +68,7 @@ export class ManufacturerComponent implements OnInit {
 
     this.http.post(`${this.apiUrl}/medicine`, medicine).subscribe({
       next: (response: any) => {
-        this.success = response.message || 'Medicine added successfully. QR code generated.';
-        this.qrCodeBase64 = response.qr_code;
+        this.success = response.message || 'Medicine added successfully.';
         this.resetForm();
         this.loadRawMaterials(); // Refresh dropdown after submission
       },
@@ -86,7 +83,6 @@ export class ManufacturerComponent implements OnInit {
     this.raw_material_id = parseInt(id, 10);
     this.error = null;
     this.success = null;
-    this.qrCodeBase64 = null;
   }
 
   private resetForm() {

@@ -15,7 +15,6 @@ export class FarmerComponent implements OnInit {
   supply_date: string = '';
   success: string | null = null;
   error: string | null = null;
-  qrCodeBase64: string | null = null;
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
@@ -29,7 +28,6 @@ export class FarmerComponent implements OnInit {
   onSubmit() {
     this.error = null;
     this.success = null;
-    this.qrCodeBase64 = null;
 
     if (!this.user_id || !this.material_type || !this.quantity || !this.source_location || !this.supply_date) {
       this.error = 'Please fill in all fields.';
@@ -46,8 +44,7 @@ export class FarmerComponent implements OnInit {
 
     this.http.post(`${this.apiUrl}/raw_material`, rawMaterial).subscribe({
       next: (response: any) => {
-        this.success = response.message || 'Raw material added successfully. QR code generated.';
-        this.qrCodeBase64 = response.qr_code;
+        this.success = response.message || 'Raw material added successfully.';
         this.resetForm();
       },
       error: (err) => {
