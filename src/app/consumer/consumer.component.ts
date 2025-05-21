@@ -264,7 +264,7 @@ export class ConsumerComponent implements OnInit, AfterViewInit {
           `Destination: ${dist.destination || 'N/A'}`,
           `Storage: ${dist.storage_condition || 'N/A'}`
         ];
-        drawRow(`Distributor $`, details, rowIndex % 2 === 0 ? '#f9f9f9' : '#ffffff');
+        drawRow(`Distributor`, details, rowIndex % 2 === 0 ? '#f9f9f9' : '#ffffff');
         rowIndex++;
         y += 5;
       });
@@ -278,7 +278,7 @@ export class ConsumerComponent implements OnInit, AfterViewInit {
           `Price: $${sale.price || 'N/A'}`,
           `Location: ${sale.retail_location || 'N/A'}`
         ];
-        drawRow(`Retailer $`, details, rowIndex % 2 === 0 ? '#f9f9f9' : '#ffffff');
+        drawRow(`Retailer`, details, rowIndex % 2 === 0 ? '#f9f9f9' : '#ffffff');
         rowIndex++;
         y += 5;
       });

@@ -533,7 +533,7 @@
             </tr>
             <!-- Distributor -->
             <tr *ngFor="let dist of history?.distributions; let i = index">
-              <td>Distributor {{ i + 1 }}</td>
+              <td>Distributor</td>
               <td>
                 <p><strong>Shipment:</strong> {{ dist.shipment_date }}</p>
                 <p><strong>Transport:</strong> {{ dist.transport_method }}</p>
@@ -543,7 +543,7 @@
             </tr>
             <!-- Retailer -->
             <tr *ngFor="let sale of history?.retail_sales; let i = index">
-              <td>Retailer {{ i + 1 }}</td>
+              <td>Retailer</td>
               <td>
                 <p><strong>Received:</strong> {{ sale.received_date }}</p>
                 <p><strong>Price:</strong> ${{ sale.price }}</p>
