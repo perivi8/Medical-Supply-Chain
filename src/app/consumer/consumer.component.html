@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Medicine Journey Tracker</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
   <style>
     @import "https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css";
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
     body {
       margin: 0;
@@ -47,8 +48,8 @@
       background: rgba(255, 255, 255, 0.95);
       border-radius: 1rem;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      padding: 1.5rem;
-      max-width: 700px;
+      padding: 2rem;
+      max-width: 900px;
       width: 100%;
       transition: transform 0.3s ease;
       margin-bottom: 1.5rem;
@@ -59,62 +60,18 @@
     }
 
     h2 {
-      font-weight: 600;
+      font-weight: 700;
       color: #2c3e50;
       margin: 0 0 1.5rem 0;
       text-align: center;
-      font-size: 1.6rem;
+      font-size: 2rem;
     }
 
-    h5 {
-      font-weight: 500;
+    h3 {
+      font-weight: 600;
       color: #34495e;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .form-label {
-      font-weight: 500;
-      color: #34495e;
-      font-size: 0.9rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .form-control {
-      border: 1px solid #dfe6e9;
-      border-radius: 8px;
-      padding: 0.65rem;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
-      background: #f9f9f9;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-      background: #fff;
-    }
-
-    .btn-primary {
-      background: linear-gradient(90deg, #3498db, #2980b9);
-      border: none;
-      border-radius: 8px;
-      padding: 0.8rem;
-      font-weight: 500;
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-      width: 100%;
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(90deg, #2980b9, #2c3e50);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
     }
 
     .btn-scan {
@@ -128,18 +85,18 @@
       transition: all 0.3s ease;
       width: 100%;
       position: relative;
-      padding-left: 2.5rem; /* Space for symbol */
-      background: #28a745; /* Green background for start */
+      padding-left: 2.5rem;
+      background: #28a745;
       color: #fff;
     }
 
     .btn-scan.scanning {
-      background: #dc3545; /* Red background for stop */
+      background: #dc3545;
       color: #fff;
     }
 
     .btn-scan:not([disabled]):not(.scanning)::before {
-      content: "\2713"; /* Unicode for checkmark (✓) */
+      content: "\2713";
       position: absolute;
       left: 1rem;
       top: 50%;
@@ -149,7 +106,7 @@
     }
 
     .btn-scan.scanning::before {
-      content: "\2717"; /* Unicode for cross (✗) */
+      content: "\2717";
       position: absolute;
       left: 1rem;
       top: 50%;
@@ -159,13 +116,13 @@
     }
 
     .btn-scan:hover {
-      background: #218838; /* Darker green on hover for start */
+      background: #218838;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .btn-scan.scanning:hover {
-      background: #c82333; /* Darker red on hover for stop */
+      background: #c82333;
     }
 
     .btn-scan:disabled {
@@ -175,7 +132,27 @@
     }
 
     .btn-scan:disabled::before {
-      content: none; /* No symbol when disabled */
+      content: none;
+    }
+
+    .btn-download {
+      background: linear-gradient(90deg, #17a2b8, #138496);
+      border: none;
+      border-radius: 8px;
+      padding: 0.8rem;
+      font-weight: 500;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+
+    .btn-download:hover {
+      background: linear-gradient(90deg, #138496, #0c5460);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .text-success {
@@ -198,108 +175,126 @@
       text-align: center;
     }
 
-    /* Timeline Container */
-    .timeline {
-      position: relative;
-      padding-left: 2.5rem;
-      margin: 0;
-    }
-
-    /* Vertical Line */
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0.75rem;
-      width: 4px;
-      height: 100%;
-      background: #dfe6e9;
-      z-index: 1;
-    }
-
-    /* Timeline Item */
-    .timeline-item {
-      position: relative;
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      border-radius: 8px;
+    .invoice-box {
       background: #fff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      z-index: 2;
+      border: 2px solid #dfe6e9;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+      position: relative;
+    }
+
+    .invoice-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #2c3e50;
+      padding-bottom: 1rem;
     }
 
-    /* Timeline Marker */
-    .timeline-item::before {
-      content: "";
-      position: absolute;
-      left: -2.25rem;
-      top: 1rem;
-      width: 1.2rem;
-      height: 1.2rem;
-      border-radius: 50%;
-      z-index: 3;
+    .invoice-header-text h1 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin: 0;
+      font-weight: 700;
     }
 
-    /* Verified Checkmark */
-    .verified-checkmark {
-      color: #28a745;
-      font-size: 1.2rem;
-      margin-left: 1rem;
-      align-self: center;
-    }
-
-    /* Specific Colors for Each Stage */
-    .timeline-item.farmer {
-      border-left: 3px solid #28a745;
-      background: #e8f5e9;
-    }
-    .timeline-item.farmer::before {
-      background: #28a745;
-      border: 2px solid #fff;
-    }
-
-    .timeline-item.manufacturer {
-      border-left: 3px solid #3498db;
-      background: #e7f3fe;
-    }
-    .timeline-item.manufacturer::before {
-      background: #3498db;
-      border: 2px solid #fff;
-    }
-
-    .timeline-item.distributor {
-      border-left: 3px solid #ffc107;
-      background: #fff3cd;
-    }
-    .timeline-item.distributor::before {
-      background: #ffc107;
-      border: 2px solid #fff;
-    }
-
-    .timeline-item.retailer {
-      border-left: 3px solid #dc3545;
-      background: #f8d7da;
-    }
-    .timeline-item.retailer::before {
-      background: #dc3545;
-      border: 2px solid #fff;
-    }
-
-    .timeline-item h5 {
-      margin-bottom: 0.75rem;
-    }
-
-    .timeline-item p {
-      margin: 0.25rem 0;
+    .invoice-header-text p {
       font-size: 0.9rem;
       color: #34495e;
+      margin: 0.3rem 0;
+      font-weight: 400;
     }
 
-    .timeline-item .content {
-      flex: 1;
+    .invoice-qr {
+      width: 100px;
+      height: 100px;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+    }
+
+    .invoice-table th,
+    .invoice-table td {
+      border: 1px solid #dfe6e9;
+      padding: 0.85rem;
+      text-align: left;
+      font-size: 0.9rem;
+      vertical-align: top;
+    }
+
+    .invoice-table th {
+      background: #2c3e50;
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .invoice-table td {
+      color: #34495e;
+      background: #f9f9f9;
+    }
+
+    .invoice-table tr:nth-child(even) td {
+      background: #ffffff;
+    }
+
+    .status-section {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #e8f5e9;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #28a745;
+    }
+
+    .status-section p {
+      margin: 0;
+      font-size: 1rem;
+      color: #28a745;
+      font-weight: 500;
+    }
+
+    .status-section .fas {
+      color: #28a745;
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .qr-animation {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1.5rem 0;
+      position: relative;
+      height: 200px;
+      width: 200px;
+    }
+
+    .qr-animation svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .qr-animation .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      background: #28a745;
+      top: 0;
+      animation: scan 2s linear infinite;
+      box-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
+    }
+
+    @keyframes scan {
+      0% { top: 0; }
+      50% { top: calc(100% - 4px); }
+      100% { top: 0; }
     }
 
     .spinner-border {
@@ -323,165 +318,133 @@
     }
 
     @media (max-width: 768px) {
-      .form-background {
-        padding: 0.5rem;
-        justify-content: flex-start;
-        min-height: auto;
-      }
-
       .container {
-        padding: 1.25rem;
+        padding: 1.5rem;
         max-width: 95%;
-        margin: 1rem auto 1rem auto;
+        margin: 1rem auto;
       }
 
       h2 {
-        font-size: 1.4rem;
-        margin-bottom: 1.25rem;
+        font-size: 1.6rem;
       }
 
-      h5 {
-        font-size: 0.95rem;
+      .invoice-header {
+        flex-direction: column;
+        align-items: flex-start;
       }
 
-      .form-label {
+      .invoice-qr {
+        width: 80px;
+        height: 80px;
+        margin-top: 1rem;
+        align-self: flex-end;
+      }
+
+      .invoice-table th,
+      .invoice-table td {
         font-size: 0.85rem;
-      }
-
-      .form-control {
-        font-size: 0.9rem;
         padding: 0.6rem;
       }
 
-      .btn-primary, .btn-scan {
-        font-size: 0.95rem;
-        padding: 0.75rem;
+      .invoice-header-text h1 {
+        font-size: 1.5rem;
       }
 
-      .text-success, .alert-danger {
-        font-size: 0.85rem;
-      }
-
-      .timeline {
-        padding-left: 2rem;
-      }
-
-      .timeline::before {
-        left: 0.5rem;
-      }
-
-      .timeline-item {
-        padding: 0.75rem;
-      }
-
-      .timeline-item::before {
-        left: -1.75rem;
-        width: 1rem;
-        height: 1rem;
-      }
-
-      .timeline-item p {
-        font-size: 0.85rem;
-      }
-
-      .verified-checkmark {
-        font-size: 1rem;
+      .qr-animation {
+        height: 150px;
+        width: 150px;
       }
 
       zxing-scanner {
         max-height: 200px;
       }
-
-      app-footer {
-        margin-top: 0.5rem;
-      }
     }
 
     @media (max-width: 576px) {
-      .form-background {
-        padding: 0.25rem;
-      }
-
       .container {
         padding: 1rem;
-        border-radius: 0.75rem;
-        margin: 0.75rem auto 0.75rem auto;
+        margin: 0.75rem auto;
       }
 
       h2 {
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
+        font-size: 1.4rem;
       }
 
-      h5 {
-        font-size: 0.9rem;
+      .invoice-header-text h1 {
+        font-size: 1.3rem;
       }
 
-      .form-label {
-        font-size: 0.8rem;
-      }
-
-      .form-control {
-        font-size: 0.85rem;
-        padding: 0.55rem;
-      }
-
-      .btn-primary, .btn-scan {
-        font-size: 0.9rem;
-        padding: 0.7rem;
-      }
-
-      .text-success, .alert-danger {
+      .invoice-table th,
+      .invoice-table td {
         font-size: 0.8rem;
         padding: 0.5rem;
       }
 
-      .timeline {
-        padding-left: 0px;
+      .invoice-qr {
+        width: 60px;
+        height: 60px;
       }
 
-      .timeline::before {
-        left: 0.25rem;
-      }
-
-      .timeline-item {
-        padding: 0.6rem;
-      }
-
-      .timeline-item::before {
-        left: -1.25rem;
-        width: 0.8rem;
-        height: 0.8rem;
-      }
-
-      .timeline-item p {
-        font-size: 0.8rem;
-      }
-
-      .verified-checkmark {
-        font-size: 0.9rem;
+      .qr-animation {
+        height: 120px;
+        width: 120px;
       }
 
       zxing-scanner {
         max-height: 150px;
       }
-
-      app-footer {
-        margin-top: 0.25rem;
-      }
     }
+    .qr-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem auto; /* Changed to auto for horizontal centering */
+  height: 200px;
+  width: 200px;
+}
+
+.qr-animation svg {
+  width: 100%;
+  height: 100%;
+}
+
+.qr-animation .scan-line {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #28a745;
+  top: 0;
+  animation: scan 2s linear infinite;
+  box-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
+}
+
+@media (max-width: 768px) {
+  .qr-animation {
+    height: 150px;
+    width: 150px;
+    margin: 1.5rem auto; /* Ensure centering persists */
+  }
+}
+
+@media (max-width: 576px) {
+  .qr-animation {
+    height: 120px;
+    width: 120px;
+    margin: 1.5rem auto; /* Ensure centering persists */
+  }
+}
   </style>
 </head>
 <body id="consumer">
   <app-header></app-header>
-<br><br><br>
+  <br><br><br>
   <div class="form-background animate__animated animate__fadeIn">
-    <div class="container">
+    <div class="container" style="padding: 0px;">
       <h2 class="animate__animated animate__fadeInDown">Consumer - Medicine Journey</h2>
 
       <!-- QR Code Scanner Section -->
       <div class="mb-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
-        <h5 class="fw-semibold mb-2">Scan QR Code</h5>
+        <h3 class="fw-semibold mb-2">Scan QR Code</h3>
         <button
           (click)="toggleScanner()"
           class="btn btn-scan w-100 mb-2"
@@ -494,6 +457,7 @@
           <zxing-scanner
             [device]="currentDevice"
             [formats]="formatsEnabled"
+            [torch]="true"
             (scanSuccess)="onScanSuccess($event)"
             (scanError)="onScanError($event)"
             class="w-100">
@@ -501,22 +465,25 @@
         </div>
       </div>
 
-      <!-- Manual ID Entry Form -->
-      <form (ngSubmit)="onSubmit()" class="mb-4">
-        <div class="mb-3 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
-          <label class="form-label">Enter Medicine ID</label>
-          <input
-            type="text"
-            [(ngModel)]="medicineId"
-            name="medicineId"
-            class="form-control"
-            placeholder="Enter Medicine ID (e.g., MED123)"
-            required>
-        </div>
-        <button type="submit" class="btn btn-primary w-100 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
-          View History
-        </button>
-      </form>
+      <!-- QR Code Animation -->
+      <div class="qr-animation animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+        <svg viewBox="0 0 100 100">
+          <rect x="10" y="10" width="30" height="30" fill="#333"/>
+          <rect x="60" y="10" width="30" height="30" fill="#333"/>
+          <rect x="10" y="60" width="30" height="30" fill="#333"/>
+          <rect x="15" y="15" width="20" height="20" fill="#fff"/>
+          <rect x="65" y="15" width="20" height="20" fill="#fff"/>
+          <rect x="15" y="65" width="20" height="20" fill="#fff"/>
+          <rect x="40" y="40" width="20" height="20" fill="#333"/>
+          <g fill="#fff">
+            <rect x="45" y="45" width="2" height="2"/>
+            <rect x="50" y="50" width="2" height="2"/>
+            <rect x="45" y="55" width="2" height="2"/>
+            <rect x="55" y="45" width="2" height="2"/>
+          </g>
+        </svg>
+        <div class="scan-line"></div>
+      </div>
 
       <!-- Loading Spinner -->
       <div *ngIf="isLoading" class="text-center mt-3 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
@@ -525,54 +492,76 @@
         </div>
       </div>
 
-      <!-- Product History Section -->
-      <div *ngIf="history && !isLoading" class="timeline">
-        <!-- Farmer (Raw Material) -->
-        <div *ngIf="history.raw_material" class="timeline-item farmer mb-4 p-3 animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
-          <div class="content">
-            <h5 class="fw-bold" style="color: #28a745;">Farmer</h5>
-            <p>Type: {{ history.raw_material.material_type }}</p>
-            <p>Quantity: {{ history.raw_material.quantity }} kg</p>
-            <p>Location: {{ history.raw_material.source_location }}</p>
-            <p>Date: {{ history.raw_material.supply_date }}</p>
+      <!-- Invoice Section -->
+      <div *ngIf="history && !isLoading" class="invoice-box animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+        <div class="invoice-header">
+          <div class="invoice-header-text">
+            <h1>Medicine Journey Invoice</h1>
+            <p>Medicine ID: {{ medicineId }}</p>
+            <p>Generated on: {{ currentDate | date:'medium' }}</p>
           </div>
-          <span class="verified-checkmark fas fa-check-circle"></span>
+          <canvas id="qrCodeCanvas" class="invoice-qr"></canvas>
         </div>
 
-        <!-- Manufacturer -->
-        <div *ngIf="history.medicine" class="timeline-item manufacturer mb-4 p-3 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
-          <div class="content">
-            <h5 class="fw-bold" style="color: #3498db;">Manufacturer</h5>
-            <p>Name: {{ history.medicine.medicine_name }}</p>
-            <p>Batch: {{ history.medicine.batch_number }}</p>
-            <p>Production: {{ history.medicine.production_date }}</p>
-            <p>Expiry: {{ history.medicine.expiry_date }}</p>
-          </div>
-          <span class="verified-checkmark fas fa-check-circle"></span>
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Farmer (Raw Material) -->
+            <tr *ngIf="history.raw_material">
+              <td>Farmer</td>
+              <td>
+                <p><strong>Type:</strong> {{ history.raw_material.material_type }}</p>
+                <p><strong>Quantity:</strong> {{ history.raw_material.quantity }} kg</p>
+                <p><strong>Location:</strong> {{ history.raw_material.source_location }}</p>
+                <p><strong>Date:</strong> {{ history.raw_material.supply_date }}</p>
+              </td>
+            </tr>
+            <!-- Manufacturer -->
+            <tr *ngIf="history.medicine">
+              <td>Manufacturer</td>
+              <td>
+                <p><strong>Name:</strong> {{ history.medicine.medicine_name }}</p>
+                <p><strong>Batch:</strong> {{ history.medicine.batch_number }}</p>
+                <p><strong>Production:</strong> {{ history.medicine.production_date }}</p>
+                <p><strong>Expiry:</strong> {{ history.medicine.expiry_date }}</p>
+              </td>
+            </tr>
+            <!-- Distributor -->
+            <tr *ngFor="let dist of history?.distributions; let i = index">
+              <td>Distributor {{ i + 1 }}</td>
+              <td>
+                <p><strong>Shipment:</strong> {{ dist.shipment_date }}</p>
+                <p><strong>Transport:</strong> {{ dist.transport_method }}</p>
+                <p><strong>Destination:</strong> {{ dist.destination }}</p>
+                <p><strong>Storage:</strong> {{ dist.storage_condition }}</p>
+              </td>
+            </tr>
+            <!-- Retailer -->
+            <tr *ngFor="let sale of history?.retail_sales; let i = index">
+              <td>Retailer {{ i + 1 }}</td>
+              <td>
+                <p><strong>Received:</strong> {{ sale.received_date }}</p>
+                <p><strong>Price:</strong> ${{ sale.price }}</p>
+                <p><strong>Location:</strong> {{ sale.retail_location }}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Status Section -->
+        <div class="status-section">
+          <p><i class="fas fa-check-circle"></i> Status: Verified Authentic</p>
         </div>
 
-        <!-- Distributor -->
-        <div *ngFor="let dist of history?.distributions; let i = index" class="timeline-item distributor mb-4 p-3 animate__animated animate__fadeInUp" [style.animation-delay]="0.7 + i * 0.1 + 's'">
-          <div class="content">
-            <h5 class="fw-bold" style="color: #ffc107;">Distributor</h5>
-            <p>Shipment: {{ dist.shipment_date }}</p>
-            <p>Transport: {{ dist.transport_method }}</p>
-            <p>Destination: {{ dist.destination }}</p>
-            <p>Storage: {{ dist.storage_condition }}</p>
-          </div>
-          <span class="verified-checkmark fas fa-check-circle"></span>
-        </div>
-
-        <!-- Retailer -->
-        <div *ngFor="let sale of history?.retail_sales; let i = index" class="timeline-item retailer mb-4 p-3 animate__animated animate__fadeInUp" [style.animation-delay]="0.7 + (history?.distributions?.length || 0) * 0.1 + i * 0.1 + 's'">
-          <div class="content">
-            <h5 class="fw-bold" style="color: #dc3545;">Retailer</h5>
-            <p>Received: {{ sale.received_date }}</p>
-            <p>Price: ${{ sale.price }}</p>
-            <p>Location: {{ sale.retail_location }}</p>
-          </div>
-          <span class="verified-checkmark fas fa-check-circle"></span>
-        </div>
+        <!-- Download Button -->
+        <button (click)="downloadInvoice()" class="btn btn-download w-100">
+          Download Invoice as PDF
+        </button>
       </div>
 
       <!-- Error Message -->
@@ -580,9 +569,6 @@
         {{ error }}
       </div>
     </div>
-
-    <!-- Footer -->
   </div>
   <app-footer></app-footer>
 </body>
-</html>
