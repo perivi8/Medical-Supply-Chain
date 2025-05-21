@@ -1,4 +1,6 @@
 import { Component, AfterViewInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
   texts = ["Medicine name", "Distribute", "Retail Sale", "Delivered"];
   index = 0;
   animationInterval: any;
+
+   constructor(private router: Router, private scroller: ViewportScroller) {}
 
   ngAfterViewInit() {
     this.runScanAnimation();
@@ -77,5 +81,12 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     if (this.animationInterval) {
       clearInterval(this.animationInterval);
     }
+  }
+    goToconsumer() {
+    this.router.navigate(['/consumer']).then(() => {
+      setTimeout(() => {
+        this.scroller.scrollToAnchor('consumer');
+      }, 100);
+    });
   }
 }

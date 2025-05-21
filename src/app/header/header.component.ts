@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { ViewportScroller } from '@angular/common'; // It will help to redirect the page 
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -33,13 +33,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   closeMobileMenu() {
     this.showMobileMenu = false;
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 50);
   }
 
   logout() {
-    localStorage.removeItem('user');
-    this.user = null;
-    this.router.navigate(['/home']);
-    this.closeMobileMenu();
+    // Show confirmation dialog
+    const confirmLogout = confirm('Are you sure you want to logout?');
+    if (confirmLogout) {
+      localStorage.removeItem('user');
+      this.user = null;
+      this.router.navigate(['/home']);
+      this.closeMobileMenu();
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -50,20 +57,33 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-   goToAbout() {
+  goToAbout() {
     this.router.navigate(['/home']).then(() => {
       setTimeout(() => {
         this.scroller.scrollToAnchor('about');
-      }, 100); // Wait for HomeComponent to render
+      }, 100);
     });
   }
-   goTocontact() {
+
+  goTocontact() {
     this.router.navigate(['/home']).then(() => {
       setTimeout(() => {
         this.scroller.scrollToAnchor('contact');
-      }, 100); // Wait for HomeComponent to render
+      }, 100);
     });
   }
-
-
+  goTohome() {
+    this.router.navigate(['/home']).then(() => {
+      setTimeout(() => {
+        this.scroller.scrollToAnchor('home');
+      }, 100);
+    });
+  }
+  goToconsumer() {
+    this.router.navigate(['/consumer']).then(() => {
+      setTimeout(() => {
+        this.scroller.scrollToAnchor('consumer');
+      }, 100);
+    });
+  }
 }

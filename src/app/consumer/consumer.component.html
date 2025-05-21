@@ -117,9 +117,8 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-outline-primary {
-      border: 1px solid #3498db;
-      color: #3498db;
+    .btn-scan {
+      border: none;
       border-radius: 8px;
       padding: 0.8rem;
       font-weight: 500;
@@ -128,19 +127,55 @@
       letter-spacing: 1px;
       transition: all 0.3s ease;
       width: 100%;
+      position: relative;
+      padding-left: 2.5rem; /* Space for symbol */
+      background: #28a745; /* Green background for start */
+      color: #fff;
     }
 
-    .btn-outline-primary:hover {
-      background: #3498db;
+    .btn-scan.scanning {
+      background: #dc3545; /* Red background for stop */
       color: #fff;
+    }
+
+    .btn-scan:not([disabled]):not(.scanning)::before {
+      content: "\2713"; /* Unicode for checkmark (✓) */
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .btn-scan.scanning::before {
+      content: "\2717"; /* Unicode for cross (✗) */
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .btn-scan:hover {
+      background: #218838; /* Darker green on hover for start */
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .btn-outline-primary:disabled {
-      border-color: #6c757d;
-      color: #6c757d;
+    .btn-scan.scanning:hover {
+      background: #c82333; /* Darker red on hover for stop */
+    }
+
+    .btn-scan:disabled {
+      background: #6c757d;
+      color: #fff;
       cursor: not-allowed;
+    }
+
+    .btn-scan:disabled::before {
+      content: none; /* No symbol when disabled */
     }
 
     .text-success {
@@ -318,7 +353,7 @@
         padding: 0.6rem;
       }
 
-      .btn-primary, .btn-outline-primary {
+      .btn-primary, .btn-scan {
         font-size: 0.95rem;
         padding: 0.75rem;
       }
@@ -391,7 +426,7 @@
         padding: 0.55rem;
       }
 
-      .btn-primary, .btn-outline-primary {
+      .btn-primary, .btn-scan {
         font-size: 0.9rem;
         padding: 0.7rem;
       }
@@ -402,7 +437,7 @@
       }
 
       .timeline {
-        padding-left: 1.5rem;
+        padding-left: 0px;
       }
 
       .timeline::before {
@@ -437,7 +472,7 @@
     }
   </style>
 </head>
-<body>
+<body id="consumer">
   <app-header></app-header>
 <br><br><br>
   <div class="form-background animate__animated animate__fadeIn">
@@ -449,7 +484,8 @@
         <h5 class="fw-semibold mb-2">Scan QR Code</h5>
         <button
           (click)="toggleScanner()"
-          class="btn btn-outline-primary w-100 mb-2"
+          class="btn btn-scan w-100 mb-2"
+          [class.scanning]="isScanning"
           [disabled]="!hasCamera">
           {{ isScanning ? 'Stop Scanning' : 'Start Scanning' }}
         </button>

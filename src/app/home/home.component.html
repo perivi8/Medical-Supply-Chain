@@ -321,75 +321,140 @@
       }
     </style>
   </head>
-  <body>
+  <body id="home">
     <div>
       <app-header></app-header>
     </div>
-<div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
-  <div class="container"  style="background-image: url(../assets/banner1.png); background-repeat: no-repeat; margin-left: 0px;">
-    <div class="row">
-      <div class="col-lg-12">
+    <div
+      class="main-banner wow fadeIn"
+      id="top"
+      data-wow-duration="1s"
+      data-wow-delay="0.5s"
+    >
+      <div
+        class="container"
+        style="
+          background-image: url(../assets/banner1.png);
+          background-repeat: no-repeat;
+          margin-left: 0px;
+        "
+      >
         <div class="row">
-          <div class="col-lg-6 align-self-center banner-left-bg" >
-            <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s" style="padding-top: 200px;">
-              <div class="row">
-                <div class="col-lg-12">
-                  <h2 style="color: black;">Medical Supply Chain Process</h2>
-                  <p style="color: black;">The medical supply chain ensures the efficient flow of healthcare products from manufacturers to patients. It involves sourcing, storage, distribution, and inventory management. A reliable process minimizes delays and maintains the quality of essential medical supplies.</p>
-                </div>
-                <div class="col-lg-12">
-                  <div class="white-button first-button scroll-to-section">
-                    <a href="#contact">Free Quote <i class="fab fa-apple"></i></a>
-                  </div>
-                  <div class="white-button scroll-to-section">
-                    <a href="#contact">Free Quote <i class="fab fa-google-play"></i></a>
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-6 align-self-center banner-left-bg">
+                <div
+                  class="left-content show-up header-text wow fadeInLeft"
+                  data-wow-duration="1s"
+                  data-wow-delay="1s"
+                  style="padding-top: 200px"
+                >
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <h2 style="color: black">Medical Supply Chain Process</h2>
+                      <p style="color: black">
+                        The medical supply chain ensures the efficient flow of
+                        healthcare products from manufacturers to patients. It
+                        involves sourcing, storage, distribution, and inventory
+                        management. A reliable process minimizes delays and
+                        maintains the quality of essential medical supplies.
+                      </p>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="white-button scroll-to-section">
+                        <a
+                          style="
+                            font-weight: bold;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 5px;
+                          "
+                          (click)="goToconsumer()"
+                        >
+                          Scan QR
+                          <i class="material-symbols-outlined"
+                            >qr_code_scanner</i
+                          >
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="col-lg-6" >
-            <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s" >
-              <img #phone src="../assets/4.png" alt="App Preview">
-              <div #scanBar class="scan-bar"></div>
-              <!-- <span #medicineScreenName class="medicine-screen-name"></span>
+              <div class="col-lg-6">
+                <div
+                  class="right-image wow fadeInRight"
+                  data-wow-duration="1s"
+                  data-wow-delay="0.5s"
+                >
+                  <img #phone src="../assets/4.png" alt="App Preview" />
+                  <div #scanBar class="scan-bar"></div>
+                  <!-- <span #medicineScreenName class="medicine-screen-name"></span>
               <span #medicineNameBelow class="medicine-name-below"></span> -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div id="about"></div>
- <div class="about-section">
-        <h1 class="about-heading" style="font-weight: bolder;">About Our Supply Chain System</h1>
-        <p class="about-text">Our Supply Chain Management System ensures transparency and traceability for medicines, from raw material sourcing to retail shelves. By connecting farmers, manufacturers, distributors, and retailers, we enable seamless data entry at every stage, allowing consumers to scan a QR code and view the complete journey of their medicine.</p>
-        <div class="grid-container">
-            <div class="grid-box">
-                <i class="fas fa-tractor"></i>
-                <h3>Farmer</h3>
-                <p>Supplies raw materials for medicines, logging details like material type, quantity, source, and supply date to ensure traceability from the source.</p>
-            </div>
-            <div class="grid-box">
-                <i class="fas fa-industry"></i>
-                <h3>Manufacturer</h3>
-                <p>Produces medicines, recording raw materials used, medicine name, batch number, production date, and expiry date for quality assurance.</p>
-            </div>
-            <div class="grid-box">
-                <i class="fas fa-truck"></i>
-                <h3>Distributor</h3>
-                <p>Manages logistics, entering shipment date, transport method, destination, and storage conditions to ensure safe delivery.</p>
-            </div>
-            <div class="grid-box">
-                <i class="fas fa-store"></i>
-                <h3>Retailer</h3>
-                <p>Handles sales, logging stock received date, price, and retail location to complete the supply chain journey.</p>
-            </div>
+    <div id="about"></div>
+    <div class="about-section">
+      <h1 class="about-heading" style="font-weight: bolder">
+        About Our Supply Chain System
+      </h1>
+      <p class="about-text">
+        Our Supply Chain Management System ensures transparency and traceability
+        for medicines, from raw material sourcing to retail shelves. By
+        connecting farmers, manufacturers, distributors, and retailers, we
+        enable seamless data entry at every stage, allowing consumers to scan a
+        QR code and view the complete journey of their medicine.
+      </p>
+      <div class="grid-container">
+        <div class="grid-box">
+          <i class="fas fa-tractor"></i>
+          <h3>Farmer</h3>
+          <p>
+            Supplies raw materials for medicines, logging details like material
+            type, quantity, source, and supply date to ensure traceability from
+            the source.
+          </p>
         </div>
+        <div class="grid-box">
+          <i class="fas fa-industry"></i>
+          <h3>Manufacturer</h3>
+          <p>
+            Produces medicines, recording raw materials used, medicine name,
+            batch number, production date, and expiry date for quality
+            assurance.
+          </p>
+        </div>
+        <div class="grid-box">
+          <i class="fas fa-truck"></i>
+          <h3>Distributor</h3>
+          <p>
+            Manages logistics, entering shipment date, transport method,
+            destination, and storage conditions to ensure safe delivery.
+          </p>
+        </div>
+        <div class="grid-box">
+          <i class="fas fa-store"></i>
+          <h3>Retailer</h3>
+          <p>
+            Handles sales, logging stock received date, price, and retail
+            location to complete the supply chain journey.
+          </p>
+        </div>
+      </div>
     </div>
     <!-- FOOTER -->
-     <footer id="contact" style="background-image: url(../assets/footer-bg.png); background-color: #3b3b3b;">
+    <footer
+      id="contact"
+      style="
+        background-image: url(../assets/footer-bg.png);
+        background-color: #3b3b3b;
+      "
+    >
       <div class="footer-logo-text" style="text-align: center">
         Medical Packaging
       </div>

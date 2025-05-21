@@ -287,10 +287,12 @@ app-footer {
   <!-- Desktop Center Nav -->
   <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
     <ul class="navbar-nav flex-row gap-3">
-      <li class="nav-item"><a class="nav-link text-white" routerLink="/home" style="cursor: pointer;">Home</a></li>
-      <li class="nav-item"><a class="nav-link text-white" (click)="goToAbout()" style="cursor: pointer;">About</a></li>
-      <li class="nav-item"><a class="nav-link text-white" (click)="goTocontact()" style="cursor: pointer;">Contact</a></li>
-      <li class="nav-item"><a class="nav-link text-white" routerLink="/consumer">Consumer</a></li>
+      <li class="nav-item"><a class="nav-link text-white" (click)="goTohome()" style="cursor: pointer;  color: white; font-weight: bolder;">Home</a></li>
+      <li class="nav-item"><a class="nav-link text-white" (click)="goToAbout()" style="cursor: pointer; color: white; font-weight: bolder;" >About</a></li>
+      <li class="nav-item"><a class="nav-link text-white" (click)="goTocontact()" style="cursor: pointer; color: white; font-weight: bolder;">Contact</a></li>
+      <li class="nav-item"><a class="nav-link text-white" (click)="goToconsumer()" style="cursor: pointer; color: white; font-weight: bolder;">Consumer</a></li>
+      <li class="nav-item">   <i class="fa-solid fa-shuffle" style="color: white; cursor: pointer; font-weight: bolder;" routerLink="#"></i></li>
+     
     </ul>
   </div>
 
@@ -331,16 +333,20 @@ app-footer {
           <i class="fa-solid fa-user me-2"></i>
           <span>{{ user?.first_name }}</span>
         </div>
-        <button class="btn btn-outline-danger btn-sm ms-2" (click)="logout()">Logout</button>
+        <i class="fa-solid fa-right-from-bracket material-symbols-outlined fa-solid fa-right-from-bracket" style="color: red; padding: 10px;"  (click)="logout()"></i>
       </ng-container>
     </div>
 
     <!-- Navigation Links -->
     <ul class="list-group list-group-flush">
-      <li class="list-group-item"><a routerLink="/home" (click)="closeMobileMenu()">Home</a></li>
-      <li class="list-group-item"><a routerLink="/about" (click)="closeMobileMenu()">About</a></li>
-      <li class="list-group-item"><a routerLink="/contact" (click)="closeMobileMenu()">Contact</a></li>
-      <li class="list-group-item"><a routerLink="/consumer" (click)="closeMobileMenu()">Consumer</a></li>
+      <li class="list-group-item"><a routerLink="/home" (click)="closeMobileMenu()"  style="color: rgb(0, 0, 0); cursor: pointer; font-weight: bolder;">Home</a></li>
+      <li class="list-group-item"><a (click)="goToAbout()" (click)="closeMobileMenu()"  style="color: rgb(0, 0, 0); cursor: pointer; font-weight: bolder;">About</a></li>
+      <li class="list-group-item"><a  (click)="goTocontact()" (click)="closeMobileMenu()"  style="color: rgb(0, 0, 0); cursor: pointer; font-weight: bolder;">Contact</a></li>
+      <li class="list-group-item"><a routerLink="/consumer" (click)="closeMobileMenu()" style="color: rgb(0, 0, 0); cursor: pointer; font-weight: bolder;">Consumer</a></li>
+      <li class="list-group-item" style="padding: 0px;" routerLink="#">
+<button class="btn-donate">Return</button>
+</li>
+
     </ul>
   </div>
 </div>
